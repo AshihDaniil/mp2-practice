@@ -118,7 +118,7 @@ TVector TVector::operator*(const double a)
 	}
 	if (a == 0)
 	{
-		throw std::exception("a=0");
+		throw 0;
 	}
 	TVector res(this->n);
 	for (int i = 0; i < this->n; i++)
