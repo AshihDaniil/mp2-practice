@@ -187,5 +187,14 @@ double& TVector::operator[](const int idx)
 
 double TVector::Norma_Vectora()
 {
-
+	if (this->n <= 0)
+	{
+		throw std::exception("0 len of tvector");
+	}
+	double norma = 0.0;
+	for (int i = 0; i < this->n; i++)
+	{
+		norma += this->x[i] * this->x[i];
+	}
+	return sqrt(norma);
 }

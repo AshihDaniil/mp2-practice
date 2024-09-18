@@ -19,8 +19,10 @@ void main()
 	std::cout << "RAZN v-ov = " << v3 << std::endl;
 	res = v1 * v2;
 	std::cout << "Skal proizv v-ov = " << res << std::endl << std::endl;
-	std::cout << "+/-/* const = 3 v1" << std::endl << v1 + 3 << std::endl << v1 - 3 << std::endl
-		<< v1 * 3 << std::endl;
-
+	double cons;
+	std::cout << "Vvedite constanty = ";
+	std::cin >> cons;
+	std::cout << "const +/-/* v1 =" << std::endl << v1 + cons << std::endl << v1 - cons << std::endl
+		<< v1 * cons << std::endl;
 
 }
