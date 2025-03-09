@@ -30,18 +30,14 @@ public:
         pCurr = pFirst;
     }
     TList(const TList<T>& list) {
-        if (list.pFirst == nullptr) {
-            return;
+        TList(const TList<T>&list) {
+            pFirst = pLast = pCurr = nullptr;
+            ListNode<T>* current = list.pFirst;
+            while (current != nullptr) {
+                insert_Back(new ListNode<T>(current->val));
+                current = current->next;
+            }
         }
-
-        pFirst = new ListNode<T>(list.pFirst->val);
-        ListNode<T>* curr = list.pFirst;
-        while (curr->next != nullptr) {
-            curr->next = new ListNode<T>(list.pFirst->val);
-            curr = curr->next;
-        }
-        pLast = curr;
-        pCurr = pFirst;
     }
 
     ~TList() {
@@ -226,5 +222,20 @@ public:
             return 0;
         }
         return 1;
+    }
+
+    TList& operator=(const TList& other) {
+        if (this != &other) {
+            while (pFirst != nullptr) {
+                Remove_First();
+            }
+
+            ListNode<T>* current = other.pFirst;
+            while (current != nullptr) {
+                insert_Back(new ListNode<T>(current->val));
+                current = current->next;
+            }
+        }
+        return *this;
     }
 };

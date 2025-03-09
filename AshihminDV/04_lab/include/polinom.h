@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "monom.h"
 #include "list.h"
@@ -12,22 +12,69 @@ private:
 	void bringing();
 
 public: 
-	Polinomial();
+	Polinomial() = default;
 	Polinomial(const std::string& str);
+	Polinomial(const Polinomial& p2);
 
+	Polinomial operator+(const Polinomial& polinom2) const;
+	Polinomial operator-(const Polinomial& polinom2) const;
+	Polinomial operator*(const Polinomial& polinom2) const;
+	Polinomial operator+(const double& x) const;
+	Polinomial operator-(const double& x) const;
+	Polinomial operator*(const double& x) const;
+	Polinomial operator+=(const double& x);
+	Polinomial operator-=(const double& x);
+	Polinomial operator*=(const double& x);
 
-	void printt()
+	Polinomial& operator=(const Polinomial& polinom2);
+
+	bool operator==(const Polinomial& polinom2) const
 	{
-		monoms.set_curr();
-		while (monoms.get_curr() != nullptr)
-		{
-			if (monoms.get_curr()->next == nullptr)
-			{
-				break;
-			}
-			std::cout << monoms.get_curr()->val;
-			monoms.Next();
-		}
-		std::cout << monoms.get_curr()->val;
+		return this->monoms == polinom2.monoms;
 	}
+
+	bool operator!=(const Polinomial& polinom2) const
+	{
+		return !(*this == polinom2);
+	}
+
+	double operator()(const double x, const double y, const double z);
+
+	bool isEmpty()
+	{
+		return (monoms.get_head() == nullptr) ? true :false;
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Polinomial& p) {
+		if (p.monoms.size() == 0) {
+			return os << "0";
+		}
+
+		bool first = true;
+		ListNode<Monomial>* current = p.monoms.get_head();
+
+		while (current != nullptr) {
+			const Monomial& m = current->val;
+
+			os << m;
+
+			current = current->next;
+		}
+
+		return os;
+	}
+
+	friend std::istream& operator>>(std::istream& is, Polinomial& p)
+	{
+		std::string str;
+		std::getline(is, str);
+
+		Polinomial p1(str);
+
+		p = p1;
+		//обработка ошибки!!
+
+		return is;
+	}
+
 };

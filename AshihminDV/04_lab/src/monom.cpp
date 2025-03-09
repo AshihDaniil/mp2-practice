@@ -57,5 +57,69 @@ Monomial::Monomial(const std::string& str)
 			pos++;
 		}
 	}
+}
 
+Monomial Monomial::operator*(const Monomial& monom2) const
+{
+	Monomial result;
+	result.coefficent = this->coefficent * monom2.coefficent;
+	result.variables = this->variables;
+	//for (const auto& [var, exp] :monom2.variables) {
+	for (const auto& p : monom2.variables) {
+		char var = p.first;
+		char exp = p.second;
+		result.variables[var] += exp;
+		if (result.variables[var] == 0) {
+			result.variables.erase(var);
+		}
+	}
+	return result;
+}
+
+Monomial Monomial::operator+(const Monomial& monom2) const
+{
+	Monomial result;
+	if (monom2.variables == this->variables)
+	{
+		result.coefficent = this->coefficent + monom2.coefficent;
+	}
+	else
+	{
+		throw "Power!";
+	}
+
+	return result;
+}
+
+Monomial& Monomial::operator+=(const Monomial& other) {
+	if (!isSimilar(other)) {
+		throw "POWER";
+	}
+	coefficent += other.coefficent;
+	return *this;
+}
+
+Monomial Monomial::operator*(double num) const {
+	Monomial result;
+	result.variables = this->variables;
+	result.coefficent = this->coefficent;
+	result.coefficent *= num;
+	return result;
+}
+
+double Monomial::operator()(double x, double y, double z) const {
+	double result = this->coefficent;
+	for (const auto& p : this->variables) {
+		char var = p.first;
+		char exp = p.second;
+		double value = 0;
+		switch (var) {
+		case 'x': value = x; break;
+		case 'y': value = y; break;
+		case 'z': value = z; break;
+		default: break;
+		}
+		result *= pow(value, exp);
+	}
+	return result;
 }
