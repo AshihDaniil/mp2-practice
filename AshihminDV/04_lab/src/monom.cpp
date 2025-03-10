@@ -82,6 +82,7 @@ Monomial Monomial::operator+(const Monomial& monom2) const
 	if (monom2.variables == this->variables)
 	{
 		result.coefficent = this->coefficent + monom2.coefficent;
+		result.variables = this->variables;
 	}
 	else
 	{

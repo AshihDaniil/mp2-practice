@@ -22,7 +22,8 @@ public:
 	double getCoefficient() const { return coefficent; }
 	void setCoefficient(double coeff) { coefficent = coeff; }
 
-	const std::map<char, int>& getVariables() const { return variables; }
+	std::map<char, int> getVariables() const { return variables; }
+	void setVariables(std::map<char, int> v2) { variables=v2; }
 
 	bool operator==(const Monomial& monom2) const
 	{
