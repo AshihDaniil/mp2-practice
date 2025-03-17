@@ -83,7 +83,7 @@ Polinomial Polinomial::operator+(const Polinomial& polinom2) const
 {
     Polinomial result;
 
-    ListNode<Monomial>* current = this->monoms.get_head();
+    /*ListNode<Monomial>* current = this->monoms.get_head();
     while (current != nullptr) {
         result.monoms.insert_Back(new ListNode<Monomial>(current->val));
         current = current->next;
@@ -93,6 +93,23 @@ Polinomial Polinomial::operator+(const Polinomial& polinom2) const
     while (current != nullptr) {
         result.monoms.insert_Back(new ListNode<Monomial>(current->val));
         current = current->next;
+    }*/
+
+    TList<Monomial> res_list = this->monoms;
+    res_list.set_curr();
+    bool flag = 1;
+    while (flag)
+    {
+        result.monoms.insert_Back(new ListNode<Monomial>(res_list.get_curr()->val));
+        flag = res_list.Next();
+    }
+    flag = 1;
+    res_list = polinom2.monoms;
+    res_list.set_curr();
+    while (flag)
+    {
+        result.monoms.insert_Back(new ListNode<Monomial>(res_list.get_curr()->val));
+        flag = res_list.Next();
     }
 
     result.bringing();

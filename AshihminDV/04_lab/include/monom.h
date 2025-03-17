@@ -17,7 +17,18 @@ public:
 	Monomial(double coef) : coefficent(coef) {}
 	Monomial(double coef, const std::map<char, int>& vars) : coefficent(coef), variables(vars) {}
 	Monomial(const std::string& str);
-	Monomial(const Monomial& m2) : variables(m2.variables), coefficent(m2.coefficent){}
+	Monomial(const Monomial& m2)
+	{
+		coefficent = m2.coefficent;
+		for (const auto& p : m2.variables) {
+			char var = p.first;
+			char exp = p.second;
+			variables[var] += exp;
+			if (variables[var] == 0) {
+				variables.erase(var);
+			}
+		}
+	}
 
 	double getCoefficient() const { return coefficent; }
 	void setCoefficient(double coeff) { coefficent = coeff; }

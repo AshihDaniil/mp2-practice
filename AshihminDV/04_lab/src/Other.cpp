@@ -8,12 +8,12 @@ void mainMenu()
 	{
 		if (p1.isEmpty())
 		{
-			std::cout << "Input Polinomial " << std::endl;
+			std::cout << "Input Polynomial " << std::endl;
 			std::cin >> p1;
 		}
 
-		std::cout << "---Polinomial menu---" << std::endl <<
-			"1. Input Polinomial" << std::endl <<
+		std::cout << "---Polynomial menu---" << std::endl <<
+			"1. Input Polynomial" << std::endl <<
 			"2. Operations on polynomials" << std::endl <<
 			"3. Operations on polynomial and constant" << std::endl <<
 			"4. Calculate the value of the polynomial" << std::endl <<
@@ -28,7 +28,7 @@ void mainMenu()
 
 		switch (choice1) {
 		case 1: {
-			std::cout << "1. Input Polinomial " << std::endl;
+			std::cout << "1. Input Polynomial " << std::endl;
 			std::cin >> p1;
 			break;
 		}

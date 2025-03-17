@@ -30,14 +30,12 @@ public:
         pCurr = pFirst;
     }
     TList(const TList<T>& list) {
-        TList(const TList<T>&list) {
             pFirst = pLast = pCurr = nullptr;
             ListNode<T>* current = list.pFirst;
             while (current != nullptr) {
                 insert_Back(new ListNode<T>(current->val));
                 current = current->next;
             }
-        }
     }
 
     ~TList() {
@@ -66,16 +64,23 @@ public:
     ListNode<T>* get_curr() const {
         return pCurr;
     }
+
+    T getCurr() const
+    {
+        return pCurr->val;
+    }
+
     void set_curr() {
         pCurr = pFirst;
     }
 
-    void Next() {
+    bool Next() {
         if (pCurr->next != nullptr)
         {
             pCurr = pCurr->next;
+            return 1;
         }
-
+        return 0;
     }
 
     ListNode<T>* search(T key) {
@@ -115,6 +120,7 @@ public:
         else {
             pLast->next = node;
             pLast = node;
+            //pLast->pNext = pStop; RingList pStop=pFirst, DefaultList pStop=nullptr Все циклы делаем до pStop'a 
         }
     }
 

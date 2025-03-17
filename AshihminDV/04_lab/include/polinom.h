@@ -19,9 +19,11 @@ public:
 	Polinomial operator+(const Polinomial& polinom2) const;
 	Polinomial operator-(const Polinomial& polinom2) const;
 	Polinomial operator*(const Polinomial& polinom2) const;
+
 	Polinomial operator+(const double& x) const;
 	Polinomial operator-(const double& x) const;
 	Polinomial operator*(const double& x) const;
+
 	Polinomial operator+=(const double& x);
 	Polinomial operator-=(const double& x);
 	Polinomial operator*=(const double& x);
