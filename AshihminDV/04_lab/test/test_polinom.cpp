@@ -68,3 +68,12 @@ TEST(Polinomial, polynomial_calculation)
 	Polinomial p1("x^2+y");
 	EXPECT_EQ(50, p1(7, 1, 0));
 }
+
+TEST(Polinomial, polynomial_operator_ravno)
+{
+	Polinomial p1("x^2+y");
+	Polinomial p2("3x^2+y");
+	p2 = p1;
+
+	EXPECT_EQ(p1, p2);
+}

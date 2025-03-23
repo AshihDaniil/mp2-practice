@@ -16,8 +16,8 @@ public:
 	Polinomial(const std::string& str);
 	Polinomial(const Polinomial& p2);
 
-	Polinomial operator+(const Polinomial& polinom2) const;
-	Polinomial operator-(const Polinomial& polinom2) const;
+	Polinomial operator+(Polinomial& polinom2);
+	Polinomial operator-(Polinomial& polinom2);
 	Polinomial operator*(const Polinomial& polinom2) const;
 
 	Polinomial operator+(const double& x) const;
@@ -52,8 +52,9 @@ public:
 			return os << "0";
 		}
 
-		bool first = true;
 		ListNode<Monomial>* current = p.monoms.get_head();
+
+
 
 		while (current != nullptr) {
 			const Monomial& m = current->val;

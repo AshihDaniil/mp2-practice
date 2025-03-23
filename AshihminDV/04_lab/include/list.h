@@ -74,14 +74,54 @@ public:
         pCurr = pFirst;
     }
 
-    bool Next() {
-        if (pCurr->next != nullptr)
+    void set_curr_value(const T& value) {
+        if (pCurr != nullptr) {
+            pCurr->val = value;
+        }
+    }
+
+    void remove_current() {
+        if (pCurr == nullptr) return;
+
+        if (pCurr == pFirst) {
+            Remove_First();
+            pCurr = pFirst;
+        }
+        else {
+            ListNode<T>* prev = pFirst;
+            while (prev->next != pCurr) {
+                prev = prev->next;
+            }
+            prev->next = pCurr->next;
+            pCurr = prev->next;
+            if (!prev->next) pLast = prev;
+        }
+    }
+
+    bool is_end()
+    {
+        if (pCurr == nullptr)
         {
-            pCurr = pCurr->next;
             return 1;
         }
         return 0;
     }
+
+    //bool Next() {
+    //    if (pCurr->next != nullptr)
+    //    {
+    //        pCurr = pCurr->next;
+    //        return 1;
+    //    }
+    //    return 0;
+    //}
+    void Next() {
+        if (pCurr != nullptr)
+        {
+            pCurr = pCurr->next;
+        }
+    }
+
 
     ListNode<T>* search(T key) {
         ListNode<T>* curr = pFirst;
@@ -242,6 +282,7 @@ public:
                 current = current->next;
             }
         }
+
         return *this;
     }
 };

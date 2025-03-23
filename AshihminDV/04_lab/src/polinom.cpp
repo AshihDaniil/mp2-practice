@@ -24,12 +24,13 @@ Polinomial::Polinomial(const std::string& str)
 
 Polinomial::Polinomial(const Polinomial& p2)
 {
-    ListNode<Monomial>* current = p2.monoms.get_head();
-    while (current != nullptr)
+    TList<Monomial> copy = p2.monoms;
+    copy.set_curr();
+    while (!copy.is_end())
     {
-        ListNode<Monomial>* newNode = new ListNode<Monomial>(current->val);
-        monoms.insert_Back(newNode);
-        current = current->next;
+        monoms.insert_Back(new ListNode < Monomial>(copy.getCurr()));
+        monoms.Next();
+
     }
 }
 
@@ -79,58 +80,41 @@ void Polinomial::bringing()
     }
 }
 
-Polinomial Polinomial::operator+(const Polinomial& polinom2) const
+Polinomial Polinomial::operator+(Polinomial& polinom2)
 {
     Polinomial result;
 
-    /*ListNode<Monomial>* current = this->monoms.get_head();
-    while (current != nullptr) {
-        result.monoms.insert_Back(new ListNode<Monomial>(current->val));
-        current = current->next;
+    monoms.set_curr();
+    while (!monoms.is_end()) {
+        result.monoms.insert_Back(new ListNode<Monomial>(monoms.getCurr()));
+        monoms.Next();
     }
 
-    current = polinom2.monoms.get_head();
-    while (current != nullptr) {
-        result.monoms.insert_Back(new ListNode<Monomial>(current->val));
-        current = current->next;
-    }*/
-
-    TList<Monomial> res_list = this->monoms;
-    res_list.set_curr();
-    bool flag = 1;
-    while (flag)
-    {
-        result.monoms.insert_Back(new ListNode<Monomial>(res_list.get_curr()->val));
-        flag = res_list.Next();
-    }
-    flag = 1;
-    res_list = polinom2.monoms;
-    res_list.set_curr();
-    while (flag)
-    {
-        result.monoms.insert_Back(new ListNode<Monomial>(res_list.get_curr()->val));
-        flag = res_list.Next();
+    polinom2.monoms.set_curr();
+    while (!polinom2.monoms.is_end()) {
+        result.monoms.insert_Back(new ListNode<Monomial>(polinom2.monoms.getCurr()));
+        polinom2.monoms.Next();
     }
 
     result.bringing();
     return result;
 }
 
-Polinomial Polinomial::operator-(const Polinomial& polinom2) const
+Polinomial Polinomial::operator-(Polinomial& polinom2)
 {
     Polinomial result;
 
-    ListNode<Monomial>* current = this->monoms.get_head();
-    while (current != nullptr) {
-        result.monoms.insert_Back(new ListNode<Monomial>(current->val));
-        current = current->next;
+    monoms.set_curr();
+    while (!monoms.is_end()) {
+        result.monoms.insert_Back(new ListNode<Monomial>(monoms.getCurr()));
+        monoms.Next();
     }
 
-    current = polinom2.monoms.get_head();
-    while (current != nullptr) {
-        Monomial inverted = current->val * (-1.0);
+    polinom2.monoms.set_curr();
+    while (!polinom2.monoms.is_end()) {
+        Monomial inverted = polinom2.monoms.getCurr() * (-1.0);
         result.monoms.insert_Back(new ListNode<Monomial>(inverted));
-        current = current->next;
+        polinom2.monoms.Next();
     }
 
     result.bringing();
@@ -141,19 +125,24 @@ Polinomial Polinomial::operator*(const Polinomial& polinom2) const
 {
     Polinomial result;
 
-    ListNode<Monomial>* currentThis = monoms.get_head();
-    while (currentThis != nullptr) {
-        ListNode<Monomial>* currentOther = polinom2.monoms.get_head();
-        while (currentOther != nullptr) {
+    TList<Monomial> list1 = this->monoms;
+    list1.set_curr();
+    TList<Monomial> list2 = polinom2.monoms;
+    
+    while (!list1.is_end())
+    {
+        list2.set_curr();
+        Monomial m1 = list1.getCurr();
 
-            Monomial product = currentThis->val * currentOther->val;
-
+        while (!list2.is_end())
+        {
+            Monomial product = m1 * list2.getCurr();
             if (product.getCoefficient() != 0.0) {
                 result.monoms.insert_Back(new ListNode<Monomial>(product));
             }
-            currentOther = currentOther->next;
+            list2.Next();
         }
-        currentThis = currentThis->next;
+        list1.Next();
     }
     result.bringing();
 
@@ -166,6 +155,7 @@ Polinomial Polinomial::operator+(const double& x) const
     result += x;
     return result;
 }
+
 Polinomial Polinomial::operator+=(const double& x)
 {
     Monomial constant(x);
@@ -173,31 +163,38 @@ Polinomial Polinomial::operator+=(const double& x)
     this->bringing();
     return *this;
 }
+
 Polinomial Polinomial::operator-(const double& x) const
 {
     Polinomial result = *this;
     result -= x;
     return result;
 }
+
 Polinomial Polinomial::operator-=(const double& x)
 {
     *this += (-x);
     return *this;
 }
+
 Polinomial Polinomial::operator*(const double& x) const
 {
     Polinomial result = *this;
     result *= x;
     return result;
 }
+
 Polinomial Polinomial::operator*=(const double& x)
 {
-    ListNode<Monomial>* current = monoms.get_head();
-    while (current != nullptr) {
-        current->val = current->val * x; // Умножаем каждый моном
-        current = current->next;
+    monoms.set_curr();
+    while (!monoms.is_end())
+    {
+        monoms.set_curr_value(monoms.getCurr()*x);
+        monoms.Next();
     }
+
     this->bringing();
+
     return *this;
 }
 
@@ -209,11 +206,15 @@ Polinomial& Polinomial::operator=(const Polinomial& polinom2)
             monoms.Remove_First();
         }
 
-        ListNode<Monomial>* current = polinom2.monoms.get_head();
-        while (current != nullptr) {
-            monoms.insert_Back(new ListNode<Monomial>(current->val));
-            current = current->next;
+        TList<Monomial> res_list = polinom2.monoms;
+        res_list.set_curr();
+        while (!res_list.is_end())
+        {
+            monoms.insert_Back(new ListNode<Monomial>(res_list.getCurr()));
+            res_list.Next();
         }
+        //while(polinom2.monoms.is_end()){}
+
     }
     return *this;
 }
@@ -222,11 +223,13 @@ double Polinomial::operator()(const double x, const double y, const double z)
 {
     double result = 0.0;
 
-    ListNode<Monomial>* curr = monoms.get_head();
-    while (curr != nullptr)
+    monoms.set_curr();
+    while (!this->monoms.is_end())
     {
-        result += curr->val(x, y, z);
-        curr = curr->next;
+        Monomial curr = monoms.getCurr();
+        result += curr(x, y, z);
+        monoms.Next();
+
     }
 
     return result;
