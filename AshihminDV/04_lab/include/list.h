@@ -18,14 +18,18 @@ private:
     ListNode<T>* pFirst;
     ListNode<T>* pLast;
     ListNode<T>* pCurr;
+    ListNode<T>* pPrev;
+    ListNode<T>* pStop;
 public:
     TList() {
         pFirst = nullptr;
         pLast = nullptr;
         pCurr = nullptr;
+        pStop = nullptr;
     }
     TList(const T& x) {
-        pFirst = new ListNode<T>(x);
+        pStop = nullptr;
+        pFirst = new ListNode<T>(x, pStop);
         pLast = pFirst;
         pCurr = pFirst;
     }
@@ -44,7 +48,7 @@ public:
             return;
         }
 
-        while (pFirst->next != nullptr) {
+        while (pFirst->next != pStop) {
             ListNode<T>* curr = pFirst;
             pFirst = pFirst->next;
             delete curr;
@@ -55,32 +59,32 @@ public:
     }
 
 
-    ListNode<T>* get_head() const {
+    ListNode<T>* get_head() const {  // TODO: удалить
         return pFirst;
     }
-    ListNode<T>* get_end() const {
+    ListNode<T>* get_end() const {  // TODO: удалить
         return pLast;
     }
     ListNode<T>* get_curr() const {
         return pCurr;
     }
 
-    T getCurr() const
+    T getCurr() const  // TODO: удалить
     {
         return pCurr->val;
     }
 
-    void set_curr() {
+    void set_curr() { // TODO: удалить
         pCurr = pFirst;
     }
 
-    void set_curr_value(const T& value) {
+    void set_curr_value(const T& value) { // TODO: удалить
         if (pCurr != nullptr) {
             pCurr->val = value;
         }
     }
 
-    void remove_current() {
+    void remove_current() {  // TODO: удалить
         if (pCurr == nullptr) return;
 
         if (pCurr == pFirst) {
@@ -98,32 +102,24 @@ public:
         }
     }
 
-    bool is_end()
+    bool is_end() const
     {
-        if (pCurr == nullptr)
+        if (pCurr == pStop)
         {
             return 1;
         }
         return 0;
     }
 
-    //bool Next() {
-    //    if (pCurr->next != nullptr)
-    //    {
-    //        pCurr = pCurr->next;
-    //        return 1;
-    //    }
-    //    return 0;
-    //}
     void Next() {
-        if (pCurr != nullptr)
+        if (pCurr != pStop)
         {
             pCurr = pCurr->next;
         }
     }
 
 
-    ListNode<T>* search(T key) {
+    ListNode<T>* search(T key) { // TODO:  pPrev и pCurr
         ListNode<T>* curr = pFirst;
         while (curr != nullptr) {
             if (curr->val == key) {
@@ -138,7 +134,7 @@ public:
     };
 
     void insert_Front(ListNode<T>* node) {
-        if (pFirst == nullptr) {
+        if (pFirst == pStop) {
             pFirst = node;
             return;
         }
@@ -154,12 +150,12 @@ public:
             return;
         }
         if (pFirst == nullptr) {
-            pFirst = node;
-            pLast = node;
+            insert_Front(node);
         }
         else {
             pLast->next = node;
             pLast = node;
+            pLast->next = pStop;
             //pLast->pNext = pStop; RingList pStop=pFirst, DefaultList pStop=nullptr Все циклы делаем до pStop'a 
         }
     }
@@ -175,7 +171,7 @@ public:
 
 
     void insert_Before(ListNode<T>* node, T key) {
-        ListNode<T>* prev = nullptr, * curr = pFirst;
+        ListNode<T>* prev = nullptr, * curr = pFirst; // TODO: search
         while ((curr != nullptr) && (curr->val != key)) {
             prev = curr;
             curr = curr->next;
@@ -196,7 +192,7 @@ public:
 
     void remove(T key) {
         ListNode<T>* prev = nullptr, * curr = pFirst;
-        while ((curr != nullptr) && (curr->val != key)) {
+        while ((curr != nullptr) && (curr->val != key)) { // TODO: search
             prev = curr;
             curr = curr->next;
         }
@@ -220,7 +216,7 @@ public:
         }
         ListNode<T>* temp = pFirst;
         pFirst = pFirst->next;
-        if (pFirst == nullptr) {
+        if (pFirst == pStop) {
             pLast = nullptr;
         }
         delete temp;
@@ -255,7 +251,7 @@ public:
         return false;
     }
 
-    bool operator!=(const TList<T>& s) const {
+    bool operator!=(const TList<T>& s) const { // TODO: operator==
         ListNode<T>* curr1 = pFirst, * curr2 = s.pFirst;
         while (curr1 != nullptr && curr2 != nullptr) {
             if (curr1->val != curr2->val) {
@@ -270,9 +266,9 @@ public:
         return 1;
     }
 
-    TList& operator=(const TList& other) {
+    const TList& operator=(const TList& other) {
         if (this != &other) {
-            while (pFirst != nullptr) {
+            while (pFirst != nullptr) { // TODO: clear и вызвать здесь и в деструкторе
                 Remove_First();
             }
 

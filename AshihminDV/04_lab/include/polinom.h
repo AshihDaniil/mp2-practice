@@ -8,7 +8,7 @@ using namespace std;
 class Polinomial
 {
 private:
-	TList<Monomial> monoms;
+	TList<Monomial> monoms; // TODO: список с головой или цикл. список с головой
 	void bringing();
 
 public: 
@@ -16,19 +16,23 @@ public:
 	Polinomial(const std::string& str);
 	Polinomial(const Polinomial& p2);
 
-	Polinomial operator+(Polinomial& polinom2);
-	Polinomial operator-(Polinomial& polinom2);
-	Polinomial operator*(const Polinomial& polinom2) const;
+	Polinomial operator+(const Polinomial& polinom2);
+	Polinomial operator-(const Polinomial& polinom2);
+	Polinomial operator*(const Polinomial& polinom2);
+
+	Polinomial operator+(const Monomial& monom);
+	Polinomial operator-(const Monomial& monom);
+	Polinomial operator*(const Monomial& monom);
 
 	Polinomial operator+(const double& x) const;
 	Polinomial operator-(const double& x) const;
 	Polinomial operator*(const double& x) const;
 
-	Polinomial operator+=(const double& x);
-	Polinomial operator-=(const double& x);
-	Polinomial operator*=(const double& x);
+	Polinomial& operator+=(const double& x);
+	Polinomial& operator-=(const double& x);
+	Polinomial& operator*=(const double& x);
 
-	Polinomial& operator=(const Polinomial& polinom2);
+	const Polinomial& operator=(const Polinomial& polinom2);
 
 	bool operator==(const Polinomial& polinom2) const
 	{
@@ -40,9 +44,9 @@ public:
 		return !(*this == polinom2);
 	}
 
-	double operator()(const double x, const double y, const double z);
+	double operator()(const double x, const double y, const double z) const;
 
-	bool isEmpty()
+	bool isEmpty() // TODO: удалить
 	{
 		return (monoms.get_head() == nullptr) ? true :false;
 	}

@@ -95,8 +95,7 @@ Polinomial Polinomial::operator+(Polinomial& polinom2)
         result.monoms.insert_Back(new ListNode<Monomial>(polinom2.monoms.getCurr()));
         polinom2.monoms.Next();
     }
-
-    result.bringing();
+    //result.bringing();
     return result;
 }
 

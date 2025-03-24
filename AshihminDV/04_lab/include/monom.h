@@ -17,7 +17,7 @@ public:
 	Monomial(double coef) : coefficent(coef) {}
 	Monomial(double coef, const std::map<char, int>& vars) : coefficent(coef), variables(vars) {}
 	Monomial(const std::string& str);
-	Monomial(const Monomial& m2)
+	Monomial(const Monomial& m2) // TODO: cpp
 	{
 		coefficent = m2.coefficent;
 		for (const auto& p : m2.variables) {
@@ -49,7 +49,7 @@ public:
 
 	Monomial operator+(const Monomial& monom2) const;
 
-	Monomial operator=(const Monomial& monom2)
+	const Monomial& operator=(const Monomial& monom2)
 	{
 		if (this != &monom2)
 		{
