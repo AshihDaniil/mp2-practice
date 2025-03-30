@@ -17,18 +17,7 @@ public:
 	Monomial(double coef) : coefficent(coef) {}
 	Monomial(double coef, const std::map<char, int>& vars) : coefficent(coef), variables(vars) {}
 	Monomial(const std::string& str);
-	Monomial(const Monomial& m2) // TODO: cpp
-	{
-		coefficent = m2.coefficent;
-		for (const auto& p : m2.variables) {
-			char var = p.first;
-			char exp = p.second;
-			variables[var] += exp;
-			if (variables[var] == 0) {
-				variables.erase(var);
-			}
-		}
-	}
+	Monomial(const Monomial& m2);
 
 	double getCoefficient() const { return coefficent; }
 	void setCoefficient(double coeff) { coefficent = coeff; }
@@ -36,34 +25,20 @@ public:
 	std::map<char, int> getVariables() const { return variables; }
 	void setVariables(std::map<char, int> v2) { variables=v2; }
 
-	bool operator==(const Monomial& monom2) const
-	{
-		return coefficent == monom2.coefficent && variables == monom2.variables;
-	}
-	bool operator!=(const Monomial& monom2) const
-	{
-		return !(*this == monom2);
-	}
+	bool operator==(const Monomial& monom2) const { 
+		return variables == monom2.variables;}
+	bool operator!=(const Monomial& monom2) const { 
+		return !(*this == monom2); }
 
 	Monomial operator*(const Monomial& monom2) const;
-
+	Monomial& operator*=(const Monomial& monom2);
 	Monomial operator+(const Monomial& monom2) const;
-
-	const Monomial& operator=(const Monomial& monom2)
-	{
-		if (this != &monom2)
-		{
-			coefficent = monom2.coefficent;
-			variables = monom2.variables;
-		}
-		return *this;
-	}
-
-	bool isSimilar(const Monomial& other) const {
-		return variables == other.variables;
-	}
-
 	Monomial& operator+=(const Monomial& other);
+	const Monomial& operator=(const Monomial& monom2);
+
+	bool isEq(const Monomial& monom2) const {
+		return coefficent ==monom2.coefficent && variables == monom2.variables;
+	}
 
 	Monomial operator*(double num) const;
 

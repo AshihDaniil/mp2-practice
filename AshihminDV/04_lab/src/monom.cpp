@@ -1,5 +1,18 @@
 #include "monom.h"
 
+Monomial::Monomial(const Monomial& m2)
+{
+	coefficent = m2.coefficent;
+	for (const auto& p : m2.variables) {
+		char var = p.first;
+		char exp = p.second;
+		variables[var] += exp;
+		if (variables[var] == 0) {
+			variables.erase(var);
+		}
+	}
+}
+
 Monomial::Monomial(const std::string& str)
 {
 	int pos = 0;
@@ -92,8 +105,33 @@ Monomial Monomial::operator+(const Monomial& monom2) const
 	return result;
 }
 
+const Monomial& Monomial::operator=(const Monomial& monom2)
+{
+	if (this != &monom2)
+	{
+		coefficent = monom2.coefficent;
+		variables = monom2.variables;
+	}
+	return *this;
+}
+
+
+Monomial& Monomial::operator*=(const Monomial& monom2)
+{
+	coefficent *= monom2.coefficent;
+	for (const auto& p : monom2.variables) {
+		char var = p.first;
+		char exp = p.second;
+		variables[var] += exp;
+		if (variables[var] == 0) {
+			variables.erase(var);
+		}
+	}
+	return *this;
+}
+
 Monomial& Monomial::operator+=(const Monomial& other) {
-	if (!isSimilar(other)) {
+	if (!(other==*this)) {
 		throw "POWER";
 	}
 	coefficent += other.coefficent;

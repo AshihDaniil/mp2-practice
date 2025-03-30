@@ -1,17 +1,18 @@
 ﻿#pragma once
 
 #include "monom.h"
-#include "list.h"
+#include "headlist.h"
 
 using namespace std;
 
 class Polinomial
 {
 private:
-	TList<Monomial> monoms; // TODO: список с головой или цикл. список с головой
+	HeadList<Monomial> monoms;
+
 	void bringing();
 
-public: 
+public:
 	Polinomial() = default;
 	Polinomial(const std::string& str);
 	Polinomial(const Polinomial& p2);
@@ -46,26 +47,26 @@ public:
 
 	double operator()(const double x, const double y, const double z) const;
 
-	bool isEmpty() // TODO: удалить
-	{
-		return (monoms.get_head() == nullptr) ? true :false;
-	}
-
 	friend std::ostream& operator<<(std::ostream& os, const Polinomial& p) {
 		if (p.monoms.size() == 0) {
 			return os << "0";
 		}
 
-		ListNode<Monomial>* current = p.monoms.get_head();
+		//const ListNode<Monomial>* current = p.monoms.get_head();
 
-
-
-		while (current != nullptr) {
+		/*while (current != nullptr) {
 			const Monomial& m = current->val;
-
 			os << m;
-
 			current = current->next;
+		}*/
+
+		Polinomial copy(p);
+
+		while (!copy.monoms.is_end())
+		{
+			const Monomial& m = copy.monoms.get_curr()->val;
+			os << m;
+			copy.monoms.Next();
 		}
 
 		return os;
@@ -83,5 +84,4 @@ public:
 
 		return is;
 	}
-
 };
