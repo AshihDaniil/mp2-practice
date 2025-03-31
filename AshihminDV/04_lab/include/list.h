@@ -33,6 +33,7 @@ public:
     ListNode<T>* get_curr() const { return pCurr; }
     bool is_end() const;
     void Next();
+    void reset();
 
 
     ListNode<T>* search(T key);
@@ -129,8 +130,20 @@ template<typename T>
 void TList<T>::Next() {
     if (pCurr != pStop)
     {
+        pPrev = pCurr;
         pCurr = pCurr->next;
     }
+    else {
+        pPrev = pStop;
+        pCurr = pFirst;
+    }
+}
+
+template<typename T>
+void TList<T>::reset()
+{
+    pPrev = pStop;
+    pCurr = pFirst;
 }
 
 template<typename T>

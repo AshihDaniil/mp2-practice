@@ -14,7 +14,7 @@ private:
 	std::map<char, int> variables;
 public:
 	Monomial() : coefficent(1.0){}
-	Monomial(double coef) : coefficent(coef) {}
+	explicit Monomial(double coef) : coefficent(coef) {}
 	Monomial(double coef, const std::map<char, int>& vars) : coefficent(coef), variables(vars) {}
 	Monomial(const std::string& str);
 	Monomial(const Monomial& m2);

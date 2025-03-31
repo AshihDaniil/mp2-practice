@@ -24,7 +24,7 @@ public:
 	Polinomial operator+(const Monomial& monom);
 	Polinomial operator-(const Monomial& monom);
 	Polinomial operator*(const Monomial& monom);
-
+	
 	Polinomial operator+(const double& x) const;
 	Polinomial operator-(const double& x) const;
 	Polinomial operator*(const double& x) const;
@@ -45,7 +45,7 @@ public:
 		return !(*this == polinom2);
 	}
 
-	double operator()(const double x, const double y, const double z) const;
+	double operator()(const double x, const double y, const double z);
 
 	friend std::ostream& operator<<(std::ostream& os, const Polinomial& p) {
 		if (p.monoms.size() == 0) {
