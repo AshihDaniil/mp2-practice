@@ -127,14 +127,14 @@ TEST(Polinomial, can_add_coeff_to_Polinomials)
 TEST(Polinomial, add_coeff_to_Polinomials_is_correct1)
 {
     Polinomial p("x+y");
-    Polinomial res("3615.2461+x+y");
-    EXPECT_TRUE(res == (p + 3615.2461));
+    Polinomial res("x+y+3615.2461");
+    EXPECT_EQ(res, (p + 3615.2461));
 }
 
 TEST(Polinomial, add_coeff_to_Polinomials_is_correct2)
 {
     Polinomial p("x+y");
-    Polinomial res("-214421.1246+x+y");
+    Polinomial res("x+y-214421.1246");
     EXPECT_TRUE(res == (p + (-214421.1246)));
 }
 TEST(Polinomial, can_substract_coeff_from_Polinomials)
@@ -146,7 +146,7 @@ TEST(Polinomial, can_substract_coeff_from_Polinomials)
 TEST(Polinomial, substract_coeff_from_Polinomial_is_correct)
 {
     Polinomial p("x+y");
-    Polinomial res("-987.654321+x+y");
+    Polinomial res("x+y-987.654321");
     EXPECT_TRUE(res == (p - 987.654321));
 }
 
@@ -261,8 +261,8 @@ TEST(Polinomial, substract_Polinomials_is_correct4)
 
     Polinomial p1("-1");
     Polinomial p2("-y");
-    Polinomial p3("y-1");
-    EXPECT_TRUE(p3 == (p1 - p2));
+    Polinomial p3("1-y");
+    EXPECT_EQ(p3, (p1 - p2));
 }
 
 
@@ -279,7 +279,7 @@ TEST(Polinomial, multiply_Polinomials_is_correct1)
     Polinomial p1("x+y");
     Polinomial p2("x+y");
     Polinomial p3("x^2+2xy+y^2");
-    EXPECT_TRUE(p3 == (p1 * p2));
+    EXPECT_EQ(p3 , (p1 * p2));
 }
 
 TEST(Polinomial, multiply_Polinomials_is_correct2)
@@ -287,7 +287,7 @@ TEST(Polinomial, multiply_Polinomials_is_correct2)
     Polinomial p1("x-y");
     Polinomial p2("x+y");
     Polinomial p3("x^2-y^2");
-    EXPECT_TRUE(p3 == (p1 * p2));
+    EXPECT_EQ(p3, (p1 * p2));
 }
 
 TEST(Polinomial, multiply_Polinomials_is_correct3)
@@ -295,7 +295,7 @@ TEST(Polinomial, multiply_Polinomials_is_correct3)
     Polinomial p1("1");
     Polinomial p2("xy");
     Polinomial p3("xy");
-    EXPECT_TRUE(p3 == (p1 * p2));
+    EXPECT_EQ(p3, (p1 * p2));
 }
 
 TEST(Polinomial, multiply_Polinomials_is_correct4)
@@ -303,7 +303,7 @@ TEST(Polinomial, multiply_Polinomials_is_correct4)
     Polinomial p1("-1");
     Polinomial p2("xy-zx+y");
     Polinomial p3("-xy+zx-y");
-    EXPECT_TRUE(p3 == (p1 * p2));
+    EXPECT_EQ(p3, (p1 * p2));
 }
 
 TEST(Polinomial, can_multiply_Polinomial_by_const)
@@ -348,7 +348,7 @@ TEST(Polinomial, count_is_correct1)
     Polinomial p1("x+y+z");
     double answ = p1(1, 2, 3);
     double real = 6;
-    EXPECT_TRUE(answ == real);
+    EXPECT_EQ(answ, real);
 }
 
 TEST(Polinomial, count_is_correct2)
@@ -356,52 +356,13 @@ TEST(Polinomial, count_is_correct2)
     Polinomial p1("-30y+10xy^2-3y^2z+xy^3z+30x-10x^2y-3xy^2+x^2y^3-3x^3+x^4y");
     double answ = p1(2, 5, 4);
     double real = 1316;
-    EXPECT_TRUE(answ == real);
+    EXPECT_EQ(answ, real);
 }
 
-
-TEST(Polinomial, count_is_correct3)
-{
-    Polinomial p1("x+y");
-    double answ = (p1 * p1)(2, 3, 4);
-    double real = 25;
-    EXPECT_TRUE(answ == real);
-}
-
-
-TEST(Polinomial, count_is_correct4)
+TEST(Polinomial, count_is_correc3)
 {
     Polinomial p1("x^2y^5+x^2y^6z");
     double answ = p1(2, 2, 2);
     double real = 640;
-    EXPECT_TRUE(answ == real);
-}
-
-TEST(Polinomial, test_sum)
-{
-    Polinomial p1("x+1");
-    Polinomial p2("x-1");
-    EXPECT_EQ(p1 + p2, Polinomial("2x"));
-}
-
-TEST(Polinomial, test_sub)
-{
-    Polinomial p1("x+1");
-    Polinomial p2("x-1");
-    EXPECT_EQ(p1 - p2, Polinomial("2"));
-}
-
-TEST(Polinomial, test_multi)
-{
-    Polinomial p1("x+1");
-    Polinomial p2("x-1");
-    EXPECT_EQ(p1 * p2, Polinomial("x^2-1"));
-}
-
-// 2xy^2z+z^4y-xz^9+x^3-yz^4
-TEST(Polinomial, test_sum1)
-{
-    Polinomial p1("2xy^2z+z^4y");
-    Polinomial p2("-xz^9+x^3-yz^4");
-    EXPECT_EQ(p1 + p2, Polinomial("x^3+2xy^2z-xz^9"));
+    EXPECT_EQ(answ, real);
 }

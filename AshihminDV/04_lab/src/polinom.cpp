@@ -62,12 +62,22 @@ Polinomial Polinomial::operator-(const Monomial& monom)
 
 Polinomial Polinomial::operator*(const Monomial& monom)
 {
-	Polinomial result(*this);
-	while (!result.monoms.is_end())
-	{
-		result.monoms.get_curr()->val*=monom;
-		result.monoms.Next();
+	Polinomial result;
+
+	if (monom.getCoefficient() == 0.0) {
+		return result;
 	}
+
+	this->monoms.reset();
+	while (!this->monoms.is_end())
+	{
+		Monomial product = this->monoms.get_curr()->val * monom;
+
+		result = result + product;
+
+		this->monoms.Next();
+	}
+
 	return result;
 }
 
@@ -97,17 +107,23 @@ Polinomial Polinomial::operator-(const Polinomial& polinom2)
 
 Polinomial Polinomial::operator*(const Polinomial& polinom2)
 {
-    Polinomial result(*this);
+	Polinomial result;
 
-	Polinomial p2(polinom2);
+	Polinomial p2_copy = polinom2;
+	p2_copy.monoms.reset();
 
-	while (!p2.monoms.is_end())
+	while (!p2_copy.monoms.is_end())
 	{
-		result = result * p2.monoms.get_curr()->val;
-		p2.monoms.Next();
+		Monomial current = p2_copy.monoms.get_curr()->val;
+
+		Polinomial temp = *this * current;
+
+		result = result + temp;
+
+		p2_copy.monoms.Next();
 	}
 
-    return result;
+	return result;
 }
 
 Polinomial Polinomial::operator+(const double& x) const
