@@ -12,19 +12,8 @@ public:
 	HeadList(const HeadList<T>& list);
 	~HeadList();
 
-	ListNode<T>* get_head() {
-		return pHead;
-	}
-
-	const ListNode<T>* get_head() const {
-		return pHead;
-	}
-
-
 	void insert_Front(ListNode<T>* node);
-	//void insert_Back(ListNode<T>* node);
 	void insert_Before(ListNode<T>* node, T key);
-
 	void remove_First();
 
 	const HeadList& operator=(const HeadList& other);
@@ -85,8 +74,7 @@ const HeadList<T>& HeadList<T>::operator=(const HeadList& other)
 {
 	if (this != &other) {
 		TList<T>::operator=(other);
-		delete pHead;
-		pHead = new ListNode<T>(T(), pFirst);
+		pHead->next = pFirst;
 	}
 	return *this;
 }

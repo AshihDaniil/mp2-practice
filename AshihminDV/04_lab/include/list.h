@@ -6,8 +6,7 @@ struct ListNode {
     T val;
     ListNode* next;
     ListNode() : val(0), next(nullptr) {}
-    ListNode(const T& x) : val(x), next(nullptr) {}
-    ListNode(const T& x, ListNode* next) : val(x), next(next) {}
+    ListNode(const T& x, ListNode* next = nullptr) : val(x), next(next) {}
 
 };
 
@@ -19,22 +18,19 @@ protected:
     ListNode<T>* pFirst;
     ListNode<T>* pLast;
     ListNode<T>* pCurr;
-    ListNode<T>* pPrev;//new
-    ListNode<T>* pStop;//new
+    ListNode<T>* pPrev;
+    ListNode<T>* pStop;
 public:
     TList();
     TList(const T& x);
-    TList(const ListNode<T>* node);
     TList(const TList<T>& list);
     ~TList();
-
 
     ListNode<T>* get_first() const { return pFirst; } //for tests
     ListNode<T>* get_curr() const { return pCurr; }
     bool is_end() const;
     void Next();
     void reset();
-
 
     ListNode<T>* search(T key);
 
@@ -74,7 +70,7 @@ TList<T>::TList(const T& x) {
 }
 
 template<typename T>
-TList<T>::TList(const TList<T>& list): TList() {
+TList<T>::TList(const TList<T>& list): TList() { // TODO: copy
 
     if (list.pFirst == nullptr) {
         return;
@@ -82,7 +78,7 @@ TList<T>::TList(const TList<T>& list): TList() {
     pFirst = new ListNode<T>(list.pFirst->val);
     pCurr = pFirst;
     pStop = nullptr;
-    pPrev = pStop;
+    pPrev = nullptr;
     ListNode<T>* curr = list.pFirst->next;
     if (curr == pStop) {
         pLast = pFirst;
@@ -103,7 +99,7 @@ TList<T>::TList(const TList<T>& list): TList() {
 template<typename T>
 TList<T>::~TList() {
 
-    if (pFirst == nullptr) {
+    if (pFirst == nullptr) { // TODO: clear
         return;
     }
 
@@ -134,7 +130,7 @@ void TList<T>::Next() {
         pCurr = pCurr->next;
     }
     else {
-        pPrev = pStop;
+        pPrev = nullptr;
         pCurr = pFirst;
     }
 }
@@ -142,24 +138,20 @@ void TList<T>::Next() {
 template<typename T>
 void TList<T>::reset()
 {
-    pPrev = pStop;
+    pPrev = nullptr;
     pCurr = pFirst;
 }
 
 template<typename T>
 ListNode<T>* TList<T>::search(T key) {
     pCurr = pFirst;
-    pPrev = pStop;
-    while (pCurr != pStop)
+    pPrev = nullptr;
+    while (pCurr != pStop && pCurr->val != key)
     {
-        if (pCurr->val == key)
-        {
-            return pCurr;
-        }
         pPrev = pCurr;
         pCurr = pCurr->next;
     }
-    return nullptr;
+    return pCurr;
 };
 
 template<typename T>
@@ -172,7 +164,7 @@ void TList<T>::insert_Front(ListNode<T>* node) {
         pLast = node;
         node->next = pStop;
         pCurr = pFirst;
-        pPrev = pStop;
+        pPrev = nullptr;
         return;
     }
     node->next = pFirst;
@@ -207,6 +199,7 @@ void TList<T>::insert_After(ListNode<T>* node, T key) {
     if (pCurr->next == pStop)
     {
         insert_Back(node);
+        return;
     }
     node->next = pCurr->next;
     pCurr->next = node;
@@ -246,7 +239,7 @@ void TList<T>::remove(T key) {
     pPrev->next = pCurr->next;
     delete pCurr;
     pCurr = pFirst;
-    pPrev = pStop;
+    pPrev = nullptr;
 };
 
 template<typename T>
@@ -267,7 +260,7 @@ void TList<T>::remove_First() {
     pFirst = pFirst->next;
     delete temp;
     pCurr = pFirst;
-    pPrev = pStop;
+    pPrev = nullptr;
 }
 
 template<typename T>
@@ -286,7 +279,7 @@ bool TList<T>::operator==(const TList<T>& s) const {
 
     ListNode<T>* curr1 = this->pFirst, * curr2 = s.pFirst;
 
-    while (curr1 != pStop && curr2 != pStop) {
+    while (curr1 != pStop && curr2 != s.pStop) {
 
         if (curr1->val != curr2->val) {
             return false;

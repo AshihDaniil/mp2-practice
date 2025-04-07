@@ -8,10 +8,7 @@ using namespace std;
 class Polinomial
 {
 private:
-	HeadList<Monomial> monoms;
-
-	void bringing();
-
+	HeadList<Monomial> monoms; // must be storted(((
 public:
 	Polinomial() = default;
 	Polinomial(const std::string& str);

@@ -2,7 +2,6 @@
 
 Polinomial::Polinomial(const std::string& str)
 {
-
 	int pos = 0;
 
 	while (pos < str.length())
@@ -72,9 +71,7 @@ Polinomial Polinomial::operator*(const Monomial& monom)
 	while (!this->monoms.is_end())
 	{
 		Monomial product = this->monoms.get_curr()->val * monom;
-
 		result = result + product;
-
 		this->monoms.Next();
 	}
 
@@ -99,27 +96,21 @@ Polinomial Polinomial::operator+(const Polinomial& polinom2)
 Polinomial Polinomial::operator-(const Polinomial& polinom2)
 {
 	Polinomial result(*this);
-
 	result = result + (polinom2 * (-1.0));
-
     return result;
 }
 
 Polinomial Polinomial::operator*(const Polinomial& polinom2)
 {
 	Polinomial result;
-
 	Polinomial p2_copy = polinom2;
 	p2_copy.monoms.reset();
 
 	while (!p2_copy.monoms.is_end())
 	{
 		Monomial current = p2_copy.monoms.get_curr()->val;
-
 		Polinomial temp = *this * current;
-
 		result = result + temp;
-
 		p2_copy.monoms.Next();
 	}
 
@@ -136,23 +127,7 @@ Polinomial Polinomial::operator+(const double& x) const
 Polinomial& Polinomial::operator+=(const double& x)
 {
     Monomial constant(x);
-
-	/*if (monoms.search(constant))
-	{
-		monoms.get_curr()->val += constant;
-		if (monoms.get_curr()->val.getCoefficient() == 0)
-		{
-			monoms.remove(monoms.get_curr()->val);
-		}
-
-	}
-	else {
-		ListNode<Monomial>* temp = new ListNode<Monomial>(constant);
-		monoms.insert_Back(temp);
-	}*/
-
 	*this = *this + constant;
-
     return *this;
 }
 
@@ -197,7 +172,6 @@ const Polinomial& Polinomial::operator=(const Polinomial& polinom2)
         while (!monoms.is_end()) {
 			monoms.remove_First();
         }
-
 		TList<Monomial> res_list(polinom2.monoms);
         while (!res_list.is_end())
         {
@@ -224,49 +198,3 @@ double Polinomial::operator()(const double x, const double y, const double z) //
 
     return result;
 }
-
-//void Polinomial::bringing()
-//{
-//    ListNode<Monomial>* current = monoms.get_head();
-//    ListNode<Monomial>* prev = nullptr;
-//
-//    while (current != nullptr) {
-//        ListNode<Monomial>* runnerPrev = current;
-//        ListNode<Monomial>* runner = current->next;
-//
-//        while (runner != nullptr) {
-//            if (current->val.isSimilar(runner->val)) {
-//                current->val += runner->val;
-//                runnerPrev->next = runner->next;
-//                if (runner == monoms.get_end()) {
-//                    monoms.insert_Back(runnerPrev);
-//                }
-//                delete runner;
-//                runner = runnerPrev->next;
-//            }
-//            else {
-//                runnerPrev = runner;
-//                runner = runner->next;
-//            }
-//        }
-//
-//        if (current->val.getCoefficient() == 0) {
-//            if (prev == nullptr) {
-//                monoms.Remove_First();
-//                current = monoms.get_head();
-//            }
-//            else {
-//                prev->next = current->next;
-//                if (current == monoms.get_end()) {
-//                    monoms.insert_Back(prev);
-//                }
-//                delete current;
-//                current = prev->next;
-//            }
-//        }
-//        else {
-//            prev = current;
-//            current = current->next;
-//        }
-//    }
-//}
