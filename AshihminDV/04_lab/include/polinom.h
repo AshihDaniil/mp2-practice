@@ -14,6 +14,8 @@ public:
 	Polinomial(const std::string& str);
 	Polinomial(const Polinomial& p2);
 
+	void insert_elem(const Monomial& monom);
+
 	Polinomial operator+(const Polinomial& polinom2);
 	Polinomial operator-(const Polinomial& polinom2);
 	Polinomial operator*(const Polinomial& polinom2);

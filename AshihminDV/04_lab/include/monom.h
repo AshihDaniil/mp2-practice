@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -11,24 +12,43 @@ class Monomial
 {
 private:
 	double coefficent;
-	std::map<char, int> variables;
+	//std::map<char, int> variables;
+	int degree;
 public:
 	Monomial() : coefficent(1.0){}
-	explicit Monomial(double coef) : coefficent(coef) {}
-	Monomial(double coef, const std::map<char, int>& vars) : coefficent(coef), variables(vars) {}
+	explicit Monomial(double coef) : coefficent(coef), degree(000) {}
+	
+	//Monomial(double coef, const std::map<char, int>& vars) : coefficent(coef), variables(vars) {}
+
 	Monomial(const std::string& str);
+	Monomial(double coef, const int degree) : coefficent(coef), degree(degree) {}
+
 	Monomial(const Monomial& m2);
+
+	//metods
 
 	double getCoefficient() const { return coefficent; }
 	void setCoefficient(double coeff) { coefficent = coeff; }
 
-	std::map<char, int> getVariables() const { return variables; }
-	void setVariables(std::map<char, int> v2) { variables=v2; }
+	//std::map<char, int> getVariables() const { return variables; }
+	//void setVariables(std::map<char, int> v2) { variables=v2; }
+
+	int getDegree() const { return degree; }
+	void setDegree(const int degree2) { degree = degree2; }
 
 	bool operator==(const Monomial& monom2) const { 
-		return variables == monom2.variables;}
+		return degree == monom2.degree;}
+
 	bool operator!=(const Monomial& monom2) const { 
 		return !(*this == monom2); }
+
+	bool operator>(const Monomial& monom2) const {
+		return degree>monom2.degree;
+	}
+	bool operator<(const Monomial& monom2) const {
+		return degree < monom2.degree;
+	}
+
 
 	Monomial operator*(const Monomial& monom2) const;
 	Monomial& operator*=(const Monomial& monom2);
@@ -37,7 +57,7 @@ public:
 	const Monomial& operator=(const Monomial& monom2);
 
 	bool isEq(const Monomial& monom2) const {
-		return coefficent ==monom2.coefficent && variables == monom2.variables;
+		return coefficent == monom2.coefficent && degree == monom2.degree;
 	}
 
 	Monomial operator*(double num) const;
@@ -48,7 +68,12 @@ public:
 	{
 		if (m.coefficent == 0.0) return ostr << "0";
 
-		if (m.variables.empty())
+		//std::ios old_state(nullptr);
+		//old_state.copyfmt(ostr);
+
+		//ostr << std::fixed << std::setprecision(4);
+
+		if (m.degree == 000)
 		{
 			if (m.coefficent > 0) ostr << '+';
 			ostr << m.coefficent;
@@ -64,11 +89,38 @@ public:
 				ostr << '-';
 			}
 
-			for (const auto& p : m.variables) {
-				char var = p.first;
-				int exp = p.second;
-				ostr << var;
-				if (exp != 1) ostr << "^" << exp;
+			if (m.degree / 100 != 0)
+			{
+				if (m.degree / 100 > 1)
+				{
+					std::cout << "x^" << m.degree / 100;
+				}
+				else
+				{
+					std::cout << "x";
+				}
+			}
+			if (m.degree / 10 % 10 != 0)
+			{
+				if(m.degree / 10 % 10 > 1)
+				{
+					std::cout << "y^" << m.degree / 10 % 10;
+				}
+				else
+				{
+					std::cout << "y";
+				}
+			}
+			if (m.degree % 10 != 0)
+			{
+				if (m.degree % 10 != 0)
+				{
+					std::cout << "z^" << m.degree % 10;
+				}
+				else
+				{
+					std::cout << "z";
+				}
 			}
 		}
 		return ostr;

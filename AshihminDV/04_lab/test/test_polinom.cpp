@@ -135,7 +135,7 @@ TEST(Polinomial, add_coeff_to_Polinomials_is_correct2)
 {
     Polinomial p("x+y");
     Polinomial res("x+y-214421.1246");
-    EXPECT_TRUE(res == (p + (-214421.1246)));
+    EXPECT_EQ(res, (p + (-21421.12446)));
 }
 TEST(Polinomial, can_substract_coeff_from_Polinomials)
 {
@@ -190,7 +190,8 @@ TEST(Polinomial, add_Polinomials_is_correct2)
     Polinomial p1("1+x");
     Polinomial p2("xyz");
     Polinomial p3("1+x+xyz");
-    EXPECT_TRUE(p3 == (p1 + p2));
+
+    EXPECT_EQ(p3, (p1 + p2));
 }
 
 TEST(Polinomial, add_Polinomials_is_correct3)
@@ -265,9 +266,6 @@ TEST(Polinomial, substract_Polinomials_is_correct4)
     EXPECT_EQ(p3, (p1 - p2));
 }
 
-
-
-
 TEST(Polinomial, can_multiply_Polinomials)
 {
     Polinomial p1("x+y+z");
@@ -287,6 +285,8 @@ TEST(Polinomial, multiply_Polinomials_is_correct2)
     Polinomial p1("x-y");
     Polinomial p2("x+y");
     Polinomial p3("x^2-y^2");
+    std::cout << "p3=" << p3 << std::endl;
+    std::cout << "p1*p2=" << (p2 * p1) << std::endl;
     EXPECT_EQ(p3, (p1 * p2));
 }
 

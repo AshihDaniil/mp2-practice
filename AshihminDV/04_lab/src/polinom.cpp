@@ -14,19 +14,14 @@ Polinomial::Polinomial(const std::string& str)
 		}
 		if (!member.empty())
 		{
-			Monomial m1(member);
+			Monomial m1(member); //конструктор из строки переделать
 			if (monoms.search(m1))
 			{
-				/*m1 += monoms.get_curr()->val;
-				monoms.remove(monoms.get_curr()->val);
-				ListNode<Monomial>* temp = new ListNode<Monomial>(m1);
-				monoms.insert_Back(temp);*/
 				monoms.get_curr()->val += m1;
 
 			}
 			else {
-				ListNode<Monomial>* temp = new ListNode<Monomial>(m1);
-				monoms.insert_Back(temp);
+				insert_elem(m1);
 			}
 		}
 	}
@@ -34,6 +29,47 @@ Polinomial::Polinomial(const std::string& str)
 }
 
 Polinomial::Polinomial(const Polinomial& p2) : monoms(p2.monoms) {};
+
+void Polinomial::insert_elem(const Monomial& monom)
+{
+	if (monom.getCoefficient() == 0) return;
+
+	monoms.reset();
+	ListNode<Monomial>* newNode = new ListNode<Monomial>(monom);
+
+	while (!monoms.is_end()) {
+		Monomial& curr = monoms.get_curr()->val;
+
+		if (curr.getDegree() == monom.getDegree()) {
+			curr += monom;
+			if (curr.getCoefficient() == 0) {
+				monoms.remove(curr);
+
+			}
+			delete newNode;
+			return;
+		}
+
+		if (monom.getDegree() > curr.getDegree()) {
+			monoms.insert_Before(newNode, curr);
+
+			return;
+		}
+
+		monoms.Next();
+	}
+
+	monoms.insert_Back(newNode);
+
+	monoms.reset();
+
+	std::cout <<  "Monoms ";
+	while (!monoms.is_end()) {
+		std::cout << monoms.get_curr()->val;
+		monoms.Next();
+	}
+	std::cout << std::endl;
+}
 
 Polinomial Polinomial::operator+(const Monomial& monom)
 {
@@ -62,17 +98,13 @@ Polinomial Polinomial::operator-(const Monomial& monom)
 Polinomial Polinomial::operator*(const Monomial& monom)
 {
 	Polinomial result;
+	monoms.reset();
 
-	if (monom.getCoefficient() == 0.0) {
-		return result;
-	}
-
-	this->monoms.reset();
-	while (!this->monoms.is_end())
-	{
-		Monomial product = this->monoms.get_curr()->val * monom;
-		result = result + product;
-		this->monoms.Next();
+	while (!monoms.is_end()) {
+		Monomial product = monoms.get_curr()->val * monom;
+		std::cout << "product p*m " << product << std::endl;
+		result.insert_elem(product);
+		monoms.Next();
 	}
 
 	return result;
@@ -83,14 +115,16 @@ Polinomial Polinomial::operator+(const Polinomial& polinom2)
 	Polinomial result(*this);
 	Polinomial p2(polinom2);
 
-	while (!p2.monoms.is_end())
-	{
-		result = result + p2.monoms.get_curr()->val;
+	p2.monoms.reset();
+	while (!p2.monoms.is_end()) {
+		Monomial m1 = p2.monoms.get_curr()->val;
+
+		result.insert_elem(m1);
+		std::cout << result << std::endl;
 		p2.monoms.Next();
 	}
 
-    
-    return result;
+	return result;
 }
 
 Polinomial Polinomial::operator-(const Polinomial& polinom2)
@@ -102,19 +136,20 @@ Polinomial Polinomial::operator-(const Polinomial& polinom2)
 
 Polinomial Polinomial::operator*(const Polinomial& polinom2)
 {
-	Polinomial result;
-	Polinomial p2_copy = polinom2;
-	p2_copy.monoms.reset();
+    Polinomial result;
+    Polinomial p2_copy = polinom2;
 
-	while (!p2_copy.monoms.is_end())
-	{
-		Monomial current = p2_copy.monoms.get_curr()->val;
-		Polinomial temp = *this * current;
-		result = result + temp;
-		p2_copy.monoms.Next();
-	}
+    p2_copy.monoms.reset();
+    while (!p2_copy.monoms.is_end()) {
+        const Monomial& current = p2_copy.monoms.get_curr()->val;
+        Polinomial temp = *this * current;
+		std::cout << "temp " << temp << std::endl;
+        result = result + temp;
+		std::cout << "result " << result << std::endl;
+        p2_copy.monoms.Next();
+    }
 
-	return result;
+    return result;
 }
 
 Polinomial Polinomial::operator+(const double& x) const

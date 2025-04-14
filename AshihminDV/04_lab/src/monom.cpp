@@ -3,72 +3,70 @@
 Monomial::Monomial(const Monomial& m2)
 {
 	coefficent = m2.coefficent;
-	for (const auto& p : m2.variables) {
-		char var = p.first;
-		char exp = p.second;
-		variables[var] += exp;
-		if (variables[var] == 0) {
-			variables.erase(var);
-		}
-	}
+	degree = m2.degree;
 }
 
 Monomial::Monomial(const std::string& str)
 {
-	int pos = 0;
-	double coef = 1.0;
+	coefficent = 1.0;
+	degree = 0;
+	size_t pos = 0;
 	bool is_negative = false;
 
-	if (str[pos] == '+' || str[pos] == '-')
-	{
+	if (pos < str.size() && (str[pos] == '+' || str[pos] == '-')) {
 		is_negative = (str[pos] == '-');
 		pos++;
 	}
 
-	if (pos >= str.size() || (!isdigit(str[pos]) && str[pos] != '.'))
-	{
-		coefficent = is_negative ? -1.0 : 1.0;
+	bool has_coefficient = false;
+	std::string coef_str;
+	while (pos < str.size() && (isdigit(str[pos]) || str[pos] == '.')) {
+		coef_str += str[pos];
+		pos++;
+		has_coefficient = true;
 	}
-	else {
-		std::string coef_str;
-		while (pos < str.size() && (isdigit(str[pos]) || str[pos] == '.'))
-		{
-			coef_str += str[pos];
-			pos++;
-		}
-		try
-		{
+
+	if (has_coefficient) {
+		try {
 			coefficent = std::stod(coef_str);
 		}
-		catch (...)
-		{
-			throw "Invalid coef format";
+		catch (...) {
+			throw std::invalid_argument("Invalid coefficient format");
 		}
-		coefficent *= is_negative ? -1.0 : 1.0;
 	}
+	else if (pos < str.size() && (str[pos] == 'x' || str[pos] == 'y' || str[pos] == 'z')) {
+		coefficent = 1.0;
+	}
+
+	coefficent *= is_negative ? -1.0 : 1.0;
+
 	while (pos < str.size()) {
-		if (isalpha(str[pos])) {
+		if (str[pos] == 'x' || str[pos] == 'y' || str[pos] == 'z') {
 			char var = str[pos];
-			int exponent = 1;
 			pos++;
+			int exp = 1;
 
 			if (pos < str.size() && str[pos] == '^') {
 				pos++;
-				if (pos >= str.size() || !isdigit(str[pos])) {
-					throw "Invalid exponent after ^";
-				}
-				exponent = 0;
+				exp = 0;
 				while (pos < str.size() && isdigit(str[pos])) {
-					exponent = exponent * 10 + (str[pos] - '0');
+					exp = exp * 10 + (str[pos] - '0');
 					pos++;
 				}
 			}
-
-			variables[var] = exponent;
+			switch (var) {
+			case 'x': degree += exp * 100; break;
+			case 'y': degree += exp * 10;  break;
+			case 'z': degree += exp;        break;
+			}
 		}
 		else {
 			pos++;
 		}
+	}
+
+	if ((degree / 100) > 9 || ((degree / 10) % 10) > 9 || (degree % 10) > 9) {
+		throw std::invalid_argument("Degree components must be 0-9");
 	}
 }
 
@@ -76,26 +74,22 @@ Monomial Monomial::operator*(const Monomial& monom2) const
 {
 	Monomial result;
 	result.coefficent = this->coefficent * monom2.coefficent;
-	result.variables = this->variables;
-	//for (const auto& [var, exp] :monom2.variables) {
-	for (const auto& p : monom2.variables) {
-		char var = p.first;
-		char exp = p.second;
-		result.variables[var] += exp;
-		if (result.variables[var] == 0) {
-			result.variables.erase(var);
-		}
-	}
+	result.degree = this->degree+monom2.degree;
 	return result;
 }
 
 Monomial Monomial::operator+(const Monomial& monom2) const
 {
 	Monomial result;
-	if (monom2.variables == this->variables)
+	/*if (monom2.variables == this->variables)
 	{
 		result.coefficent = this->coefficent + monom2.coefficent;
 		result.variables = this->variables;
+	}*/
+	if (this->degree == monom2.degree)
+	{
+		result.coefficent = this->coefficent + monom2.coefficent;
+		result.degree = this->degree;
 	}
 	else
 	{
@@ -110,7 +104,10 @@ const Monomial& Monomial::operator=(const Monomial& monom2)
 	if (this != &monom2)
 	{
 		coefficent = monom2.coefficent;
-		variables = monom2.variables;
+
+		degree = monom2.degree;
+
+		//variables = monom2.variables;
 	}
 	return *this;
 }
@@ -119,14 +116,17 @@ const Monomial& Monomial::operator=(const Monomial& monom2)
 Monomial& Monomial::operator*=(const Monomial& monom2)
 {
 	coefficent *= monom2.coefficent;
-	for (const auto& p : monom2.variables) {
+	
+	degree += monom2.degree;
+	
+	/*for (const auto& p : monom2.variables) {
 		char var = p.first;
 		char exp = p.second;
 		variables[var] += exp;
 		if (variables[var] == 0) {
 			variables.erase(var);
 		}
-	}
+	}*/
 	return *this;
 }
 
@@ -140,7 +140,10 @@ Monomial& Monomial::operator+=(const Monomial& other) {
 
 Monomial Monomial::operator*(double num) const {
 	Monomial result;
-	result.variables = this->variables;
+	//result.variables = this->variables;
+	
+	result.degree = this->degree;
+
 	result.coefficent = this->coefficent;
 	result.coefficent *= num;
 	return result;
@@ -148,17 +151,7 @@ Monomial Monomial::operator*(double num) const {
 
 double Monomial::operator()(double x, double y, double z) const {
 	double result = this->coefficent;
-	for (const auto& p : this->variables) {
-		char var = p.first;
-		char exp = p.second;
-		double value = 0;
-		switch (var) {
-		case 'x': value = x; break;
-		case 'y': value = y; break;
-		case 'z': value = z; break;
-		default: break;
-		}
-		result *= pow(value, exp);
-	}
+	result = result * pow(x, this->degree / 100) * pow(y, this->degree / 10 % 10) * pow(z, this->degree % 10);
+	
 	return result;
 }

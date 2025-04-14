@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include <iostream>
 
 template <typename T>
@@ -277,21 +277,18 @@ size_t TList<T>::size() const {
 template<typename T>
 bool TList<T>::operator==(const TList<T>& s) const {
 
-    ListNode<T>* curr1 = this->pFirst, * curr2 = s.pFirst;
+    ListNode<T>* curr1 = pFirst;
+    ListNode<T>* curr2 = s.pFirst;
 
     while (curr1 != pStop && curr2 != s.pStop) {
-
-        if (curr1->val != curr2->val) {
+        if (!(curr1->val == curr2->val)) {
             return false;
         }
         curr1 = curr1->next;
         curr2 = curr2->next;
     }
 
-    if (curr1 == nullptr && curr2 == nullptr) {
-        return true;
-    }
-    return false;
+    return (curr1 == pStop) && (curr2 == s.pStop);
 }
 
 template<typename T>
