@@ -12,13 +12,23 @@ int main()
 
 	//std::cout << p1 << std::endl;
 
-	Monomial m1("5xy");
-	std::cout << m1 << std::endl;
+	//Monomial m1("5xy");
+	//std::cout << m1 << std::endl;
 
-	////std::string s2("3x^2y+10+xyz");
+	std::string s1("x+y+z");
 
-	////Polinomial p2(s2);
+	Polinomial p1(s1);
+	std::cout << p1 << std::endl;
 
+	std::string s2("x-y");
+
+	Polinomial p2(s2);
+	std::cout << p2 << std::endl;
+
+	Polinomial p3;
+	p3 = p1 * p2;
+
+	std::cout << p3;
 	////std::cout << p1 - p2 << std::endl;
 
 	//double d(10);

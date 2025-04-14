@@ -41,6 +41,7 @@ void Polinomial::insert_elem(const Monomial& monom)
 		Monomial& curr = monoms.get_curr()->val;
 
 		if (curr.getDegree() == monom.getDegree()) {
+			
 			curr += monom;
 			if (curr.getCoefficient() == 0) {
 				monoms.remove(curr);
@@ -63,12 +64,6 @@ void Polinomial::insert_elem(const Monomial& monom)
 
 	monoms.reset();
 
-	std::cout <<  "Monoms ";
-	while (!monoms.is_end()) {
-		std::cout << monoms.get_curr()->val;
-		monoms.Next();
-	}
-	std::cout << std::endl;
 }
 
 Polinomial Polinomial::operator+(const Monomial& monom)
@@ -102,7 +97,6 @@ Polinomial Polinomial::operator*(const Monomial& monom)
 
 	while (!monoms.is_end()) {
 		Monomial product = monoms.get_curr()->val * monom;
-		std::cout << "product p*m " << product << std::endl;
 		result.insert_elem(product);
 		monoms.Next();
 	}
@@ -120,7 +114,6 @@ Polinomial Polinomial::operator+(const Polinomial& polinom2)
 		Monomial m1 = p2.monoms.get_curr()->val;
 
 		result.insert_elem(m1);
-		std::cout << result << std::endl;
 		p2.monoms.Next();
 	}
 
@@ -143,9 +136,7 @@ Polinomial Polinomial::operator*(const Polinomial& polinom2)
     while (!p2_copy.monoms.is_end()) {
         const Monomial& current = p2_copy.monoms.get_curr()->val;
         Polinomial temp = *this * current;
-		std::cout << "temp " << temp << std::endl;
         result = result + temp;
-		std::cout << "result " << result << std::endl;
         p2_copy.monoms.Next();
     }
 

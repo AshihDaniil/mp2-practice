@@ -177,9 +177,11 @@ void TList<T>::insert_Back(ListNode<T>* node) {
         throw "cant insert empty Node";
     }
     if (pFirst == nullptr) {
+        //std::cout << "pushFRONT" << std::endl;
         insert_Front(node);
     }
     else {
+        //std::cout << "pushBACK" << std::endl;
         pLast->next = node;
         pLast = node;
         pLast->next = pStop;

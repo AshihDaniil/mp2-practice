@@ -78,7 +78,7 @@ public:
 			if (m.coefficent > 0) ostr << '+';
 			ostr << m.coefficent;
 		}
-		else{
+		else {
 			if (m.coefficent > 0) ostr << '+';
 			if (m.coefficent != 1.0 && m.coefficent != -1.0)
 			{
@@ -102,7 +102,7 @@ public:
 			}
 			if (m.degree / 10 % 10 != 0)
 			{
-				if(m.degree / 10 % 10 > 1)
+				if (m.degree / 10 % 10 > 1)
 				{
 					std::cout << "y^" << m.degree / 10 % 10;
 				}
@@ -111,9 +111,12 @@ public:
 					std::cout << "y";
 				}
 			}
+			else {
+				std::cout << "y^0" << std::endl;
+			}
 			if (m.degree % 10 != 0)
 			{
-				if (m.degree % 10 != 0)
+				if (m.degree % 10 > 1)
 				{
 					std::cout << "z^" << m.degree % 10;
 				}

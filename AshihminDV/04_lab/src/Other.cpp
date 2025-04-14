@@ -10,10 +10,10 @@ void mainMenu()
 	{
 
 		std::cout << "---Polynomial menu---" << std::endl <<
-			"1. Input Polynomial" << std::endl <<
-			"2. Operations on polynomials" << std::endl <<
-			"3. Operations on polynomial and constant" << std::endl <<
-			"4. Calculate the value of the polynomial" << std::endl <<
+			"1. Operations on polynomials" << std::endl <<
+			"2. Operations on polynomial and constant" << std::endl <<
+			"3. Calculate the value of the polynomial" << std::endl <<
+			"4. Change Polynomial" << std::endl <<
 			"5. Exit" << std::endl << std::endl <<
 			"Current polynomial = " << p1 << std::endl << std::endl <<
 			"Select the mode: ";
@@ -24,12 +24,12 @@ void mainMenu()
 		cin.ignore();
 
 		switch (choice1) {
-		case 1: {
+		case 4: {
 			std::cout << "1. Input Polynomial " << std::endl;
 			std::cin >> p1;
 			break;
 		}
-		case 2: {
+		case 1: {
 			int choice2 = 1;
 
 			while (choice2 != 4)
@@ -48,6 +48,8 @@ void mainMenu()
 					std::cout << "Enter the second polynomial: ";
 					Polinomial p2;
 					std::cin >> p2;
+
+					std::cout << "Original polynomial: " << p1 << std::endl;
 					std::cout << "Result: " << p1 + p2 << std::endl;
 					break;
 				}
@@ -56,6 +58,8 @@ void mainMenu()
 					std::cout << "Enter the second polynomial: ";
 					Polinomial p2;
 					std::cin >> p2;
+
+					std::cout << "Original polynomial: " << p1 << std::endl;
 					std::cout << "Result: " << p1 - p2 << std::endl;
 					break;
 				}
@@ -64,6 +68,8 @@ void mainMenu()
 					std::cout << "Enter the second polynomial: ";
 					Polinomial p2;
 					std::cin >> p2;
+
+					std::cout << "Original polynomial: " << p1 << std::endl;
 					std::cout << "Result: " << p1 * p2 << std::endl;
 					break;
 				}
@@ -79,7 +85,7 @@ void mainMenu()
 			break;
 
 		}
-		case 3: {
+		case 2: {
 			int choice2 = 1;
 
 			while (choice2 != 4)
@@ -128,7 +134,7 @@ void mainMenu()
 			}
 			break;
 		}
-		case 4: {
+		case 3: {
 			double x, y, z;
 			std::cout << "---Calculating the value of the polynomial---" << std::endl <<
 				"Current polynomial = " << p1 << std::endl <<

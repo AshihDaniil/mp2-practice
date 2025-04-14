@@ -272,6 +272,14 @@ TEST(Polinomial, can_multiply_Polinomials)
     ASSERT_NO_THROW(p1 * p1);
 }
 
+TEST(Polinomial, multiply_Polinomials_is_correct0)
+{
+    Polinomial p1("x-1");
+    Polinomial p2("x-1");
+    Polinomial p3("x^2-2x+1");
+    EXPECT_EQ(p3, (p1 * p2));
+}
+
 TEST(Polinomial, multiply_Polinomials_is_correct1)
 {
     Polinomial p1("x+y");
@@ -282,11 +290,9 @@ TEST(Polinomial, multiply_Polinomials_is_correct1)
 
 TEST(Polinomial, multiply_Polinomials_is_correct2)
 {
-    Polinomial p1("x-y");
-    Polinomial p2("x+y");
-    Polinomial p3("x^2-y^2");
-    std::cout << "p3=" << p3 << std::endl;
-    std::cout << "p1*p2=" << (p2 * p1) << std::endl;
+    Polinomial p1("y^2+x");
+    Polinomial p2("y-x");
+    Polinomial p3("-x^2-xy^2+xy+y^3");
     EXPECT_EQ(p3, (p1 * p2));
 }
 
