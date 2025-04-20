@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 #include <iostream>
 
 template <typename T>
@@ -20,6 +20,7 @@ protected:
     ListNode<T>* pCurr;
     ListNode<T>* pPrev;
     ListNode<T>* pStop;
+    void clear();
 public:
     TList();
     TList(const T& x);
@@ -72,48 +73,36 @@ TList<T>::TList(const T& x) {
 template<typename T>
 TList<T>::TList(const TList<T>& list): TList() { // TODO: copy
 
-    if (list.pFirst == nullptr) {
-        return;
-    }
+    if (list.pFirst == nullptr) return;
+
     pFirst = new ListNode<T>(list.pFirst->val);
-    pCurr = pFirst;
-    pStop = nullptr;
-    pPrev = nullptr;
-    ListNode<T>* curr = list.pFirst->next;
-    if (curr == pStop) {
-        pLast = pFirst;
-        return;
+    ListNode<T>* src = list.pFirst->next;
+    ListNode<T>* dest = pFirst;
+
+    while (src != nullptr) {
+        dest->next = new ListNode<T>(src->val);
+        dest = dest->next;
+        src = src->next;
     }
-    while (curr != list.pStop) {
-        pCurr->next = new ListNode<T>(curr->val);
-        pPrev = pCurr;
-        pCurr = pCurr->next;
-        curr = curr->next;
-    }
-    pPrev->next = pCurr;
-    pLast = pCurr;
+
+    pLast = dest;
     pCurr = pFirst;
-    pPrev = pStop;
+}
+
+template<typename T>
+void TList<T>::clear() {
+    ListNode<T>* curr = pFirst;
+    while (curr != nullptr) {
+        ListNode<T>* next = curr->next;
+        delete curr;
+        curr = next;
+    }
+    pFirst = pLast = pCurr = pPrev = nullptr;
 }
 
 template<typename T>
 TList<T>::~TList() {
-
-    if (pFirst == nullptr) { // TODO: clear
-        return;
-    }
-
-    ListNode<T>* current = pFirst;
-    while (current != pStop) {
-        ListNode<T>* next = current->next;
-        delete current;
-        current = next;
-    }
-    pFirst = nullptr;
-    pLast = nullptr;
-    pCurr = nullptr;
-    pPrev = nullptr;
-    pStop = nullptr;
+    clear();
 }
 
 template<typename T>
@@ -124,14 +113,9 @@ bool TList<T>::is_end() const
 
 template<typename T>
 void TList<T>::Next() {
-    if (pCurr != pStop)
-    {
+    if (pCurr != nullptr) {
         pPrev = pCurr;
         pCurr = pCurr->next;
-    }
-    else {
-        pPrev = nullptr;
-        pCurr = pFirst;
     }
 }
 
@@ -177,11 +161,9 @@ void TList<T>::insert_Back(ListNode<T>* node) {
         throw "cant insert empty Node";
     }
     if (pFirst == nullptr) {
-        //std::cout << "pushFRONT" << std::endl;
         insert_Front(node);
     }
     else {
-        //std::cout << "pushBACK" << std::endl;
         pLast->next = node;
         pLast = node;
         pLast->next = pStop;
@@ -239,9 +221,9 @@ void TList<T>::remove(T key) {
         return;
     }
     pPrev->next = pCurr->next;
+    if (pCurr == pLast) pLast = pPrev;
     delete pCurr;
-    pCurr = pFirst;
-    pPrev = nullptr;
+    reset();
 };
 
 template<typename T>
@@ -249,20 +231,14 @@ void TList<T>::remove_First() {
     if (pFirst == nullptr) {
         throw "List is empty";
     }
-    ListNode<T>* temp = pFirst;
 
-    if (pFirst->next == nullptr)
-    {
-        delete pFirst;
-        pFirst = nullptr;
-        pCurr = nullptr;
-        pLast = nullptr;
-        return;
-    }
+    ListNode<T>* temp = pFirst;
     pFirst = pFirst->next;
+
+    if (temp == pLast) pLast = nullptr;
+
     delete temp;
-    pCurr = pFirst;
-    pPrev = nullptr;
+    reset();
 }
 
 template<typename T>
@@ -300,36 +276,288 @@ const TList<T>& TList<T>::operator=(const TList& other) {
         return *this;
     }
 
-    if (pFirst)
-    {
-        pCurr = pFirst;
-        while (pCurr != pStop) {
-            pPrev = pCurr;
-            pCurr = pCurr->next;
-            delete pPrev;
-        }
-    }
+    clear();
 
-    pStop = nullptr;
-    if (other.pFirst == nullptr)
-    {
-        return *this;
-    }
+    if (!other.pFirst) return *this;
 
     pFirst = new ListNode<T>(other.pFirst->val);
-    pCurr = pFirst;
-    ListNode<T>* curr = other.pFirst->next;
+    ListNode<T>* curr = pFirst;
+    ListNode<T>* src = other.pFirst->next;
 
-    while (curr != pStop)
-    {
-        pCurr->next = new ListNode<T>(curr->val);
-        pCurr = pCurr->next;
+    while (src) {
+        curr->next = new ListNode<T>(src->val);
         curr = curr->next;
+        src = src->next;
     }
-    pLast = pCurr;
 
-    pCurr = pFirst;
-    pPrev = nullptr;
+    pLast = curr;
+    reset();
 
     return *this;
+
 }
+
+//changed
+
+//template <typename T>
+//struct ListNode {
+//    T val;
+//    ListNode* next;
+//    ListNode() : val(0), next(nullptr) {}
+//    ListNode(const T& x, ListNode* next = nullptr) : val(x), next(next) {}
+//};
+//
+//template<typename T>
+//class TList {
+//protected:
+//    ListNode<T>* pFirst;
+//    ListNode<T>* pLast;
+//    ListNode<T>* pCurr;
+//    ListNode<T>* pPrev;
+//    const ListNode<T>* pStop = nullptr;
+//
+//    void clear(); // new helper to avoid code duplication
+//
+//public:
+//    TList();
+//    TList(const T& x);
+//    TList(const TList<T>& list);
+//    ~TList();
+//
+//    ListNode<T>* get_first() const { return pFirst; }
+//    ListNode<T>* get_curr() const { return pCurr; }
+//    bool is_end() const;
+//    void Next();
+//    void reset();
+//
+//    ListNode<T>* search(T key);
+//
+//    virtual void insert_Front(ListNode<T>* node);
+//    void insert_Back(ListNode<T>* node);
+//
+//    void insert_After(ListNode<T>* node, T key);
+//    virtual void insert_Before(ListNode<T>* node, T key);
+//
+//    void remove(T key);
+//    virtual void remove_First();
+//
+//    size_t size() const;
+//
+//    virtual bool operator==(const TList<T>& s) const;
+//    virtual bool operator!=(const TList<T>& s) const { return !(*this == s); }
+//
+//    virtual const TList& operator=(const TList& other);
+//};
+//
+//// Constructor & Destructor
+//
+//template<typename T>
+//TList<T>::TList()
+//    : pFirst(nullptr), pLast(nullptr), pCurr(nullptr), pPrev(nullptr) {
+//}
+//
+//template<typename T>
+//TList<T>::TList(const T& x) : TList() {
+//    pFirst = new ListNode<T>(x);
+//    pLast = pFirst;
+//    pCurr = pFirst;
+//}
+//
+//template<typename T>
+//TList<T>::TList(const TList<T>& list) : TList() {
+//    if (list.pFirst == nullptr) return;
+//
+//    pFirst = new ListNode<T>(list.pFirst->val);
+//    ListNode<T>* src = list.pFirst->next;
+//    ListNode<T>* dest = pFirst;
+//
+//    while (src != nullptr) {
+//        dest->next = new ListNode<T>(src->val);
+//        dest = dest->next;
+//        src = src->next;
+//    }
+//
+//    pLast = dest;
+//    pCurr = pFirst;
+//}
+//
+//template<typename T>
+//void TList<T>::clear() {
+//    ListNode<T>* curr = pFirst;
+//    while (curr != nullptr) {
+//        ListNode<T>* next = curr->next;
+//        delete curr;
+//        curr = next;
+//    }
+//    pFirst = pLast = pCurr = pPrev = nullptr;
+//}
+//
+//template<typename T>
+//TList<T>::~TList() {
+//    clear();
+//}
+//
+//// Navigation
+//
+//template<typename T>
+//bool TList<T>::is_end() const {
+//    return pCurr == nullptr;
+//}
+//
+//template<typename T>
+//void TList<T>::Next() {
+//    if (pCurr != nullptr) {
+//        pPrev = pCurr;
+//        pCurr = pCurr->next;
+//    }
+//}
+//
+//template<typename T>
+//void TList<T>::reset() {
+//    pCurr = pFirst;
+//    pPrev = nullptr;
+//}
+//
+//// Search
+//
+//template<typename T>
+//ListNode<T>* TList<T>::search(T key) {
+//    pCurr = pFirst;
+//    pPrev = nullptr;
+//    while (pCurr != nullptr && pCurr->val != key) {
+//        pPrev = pCurr;
+//        pCurr = pCurr->next;
+//    }
+//    return pCurr;
+//}
+//
+//// Insertion
+//
+//template<typename T>
+//void TList<T>::insert_Front(ListNode<T>* node) {
+//    if (!node) throw "Can't insert null node at front";
+//
+//    node->next = pFirst;
+//    pFirst = node;
+//    if (!pLast) pLast = node;
+//    reset();
+//}
+//
+//template<typename T>
+//void TList<T>::insert_Back(ListNode<T>* node) {
+//    if (!node) throw "Can't insert null node at back";
+//
+//    node->next = nullptr;
+//    if (!pFirst) {
+//        insert_Front(node);
+//    }
+//    else {
+//        pLast->next = node;
+//        pLast = node;
+//    }
+//}
+//
+//template<typename T>
+//void TList<T>::insert_After(ListNode<T>* node, T key) {
+//    if (!node) throw "Can't insert null node after";
+//
+//    if (!search(key)) throw "Key not found";
+//
+//    node->next = pCurr->next;
+//    pCurr->next = node;
+//    if (pCurr == pLast) pLast = node;
+//}
+//
+//template<typename T>
+//void TList<T>::insert_Before(ListNode<T>* node, T key) {
+//    if (!node) throw "Can't insert null node before";
+//
+//    if (!search(key)) throw "Key not found";
+//
+//    if (pCurr == pFirst) {
+//        insert_Front(node);
+//    }
+//    else {
+//        node->next = pCurr;
+//        pPrev->next = node;
+//    }
+//}
+//
+//// Deletion
+//
+//template<typename T>
+//void TList<T>::remove(T key) {
+//    if (!search(key)) throw "Key not found";
+//
+//    if (pCurr == pFirst) {
+//        remove_First();
+//        return;
+//    }pPrev->next = pCurr->next;
+//    if (pCurr == pLast) pLast = pPrev;
+//    delete pCurr;
+//    reset();
+//}
+//
+//template<typename T>
+//void TList<T>::remove_First() {
+//    if (!pFirst) throw "List is empty";
+//
+//    ListNode<T>* temp = pFirst;
+//    pFirst = pFirst->next;
+//
+//    if (temp == pLast) pLast = nullptr;
+//
+//    delete temp;
+//    reset();
+//}
+//
+//// Utilities
+//
+//template<typename T>
+//size_t TList<T>::size() const {
+//    size_t count = 0;
+//    ListNode<T>* curr = pFirst;
+//    while (curr) {
+//        count++;
+//        curr = curr->next;
+//    }
+//    return count;
+//}
+//
+//template<typename T>
+//bool TList<T>::operator==(const TList<T>& s) const {
+//    ListNode<T>* a = pFirst;
+//    ListNode<T>* b = s.pFirst;
+//
+//    while (a && b) {
+//        if (a->val != b->val) return false;
+//        a = a->next;
+//        b = b->next;
+//    }
+//
+//    return a == nullptr && b == nullptr;
+//}
+//
+//template<typename T>
+//const TList<T>& TList<T>::operator=(const TList<T>& other) {
+//    if (this == &other) return *this;
+//
+//    clear();
+//
+//    if (!other.pFirst) return *this;
+//
+//    pFirst = new ListNode<T>(other.pFirst->val);
+//    ListNode<T>* curr = pFirst;
+//    ListNode<T>* src = other.pFirst->next;
+//
+//    while (src) {
+//        curr->next = new ListNode<T>(src->val);
+//        curr = curr->next;
+//        src = src->next;
+//    }
+//
+//    pLast = curr;
+//    reset();
+//
+//    return *this;
+//}

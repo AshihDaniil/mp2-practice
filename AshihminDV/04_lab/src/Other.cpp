@@ -1,156 +1,143 @@
 #include "Other.h"
+#include <limits> // for std::numeric_limits
+
+void clearInput() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 void mainMenu()
 {
-	char a('y');
-	Polinomial p1;
-	std::cout << "Input Polynomial " << std::endl;
-	std::cin >> p1;
-	while (a != 'n')
-	{
+    char run = 'y';
+    Polinomial p1;
 
-		std::cout << "---Polynomial menu---" << std::endl <<
-			"1. Operations on polynomials" << std::endl <<
-			"2. Operations on polynomial and constant" << std::endl <<
-			"3. Calculate the value of the polynomial" << std::endl <<
-			"4. Change Polynomial" << std::endl <<
-			"5. Exit" << std::endl << std::endl <<
-			"Current polynomial = " << p1 << std::endl << std::endl <<
-			"Select the mode: ";
+    std::cout << "=== Polynomial Calculator ==="<< std::endl;
+    std::cout << "Enter initial polynomial: ";
+    std::cin >> p1;
 
-		int choice1;
+    while (run != 'n')
+    {
+        std::cout << std::endl << "==============================" << std::endl;
+        std::cout << "         Main Menu" << std::endl;
+        std::cout << "==============================" << std::endl;
+        std::cout << "1. Operations on polynomials" << std::endl;
+        std::cout << "2. Operations on polynomial and constant" << std::endl;
+        std::cout << "3. Calculate polynomial value" << std::endl;
+        std::cout << "4. Change polynomial" << std::endl;
+        std::cout << "5. Exit" << std::endl;
+        std::cout << "------------------------------" << std::endl;
+        std::cout << "Current polynomial: " << p1 << std::endl;
+        std::cout << "Select an option: ";
 
-		cin >> choice1;
-		cin.ignore();
+        int choice1;
+        std::cin >> choice1;
 
-		switch (choice1) {
-		case 4: {
-			std::cout << "1. Input Polynomial " << std::endl;
-			std::cin >> p1;
-			break;
-		}
-		case 1: {
-			int choice2 = 1;
+        if (std::cin.fail()) {
+            std::cout << "Invalid input. Please enter a number." << std::endl;
+            clearInput();
+            continue;
+        }
 
-			while (choice2 != 4)
-			{
-				std::cout << "---Operations on polynomials menu---" << std::endl <<
-					"1. Polynomial addition" << std::endl <<
-					"2. Subtraction of polynomials" << std::endl <<
-					"3. Multiplication of polynomials" << std::endl <<
-					"4. Exit" << std::endl << "Select the mode: ";
-				std::cin >> choice2;
-				std::cin.ignore();
-				switch (choice2)
-				{
-				case 1:
-				{
-					std::cout << "Enter the second polynomial: ";
-					Polinomial p2;
-					std::cin >> p2;
+        switch (choice1) {
+        case 1: {
+            int op = 0;
+            while (op != 4) {
+                std::cout << "\n--- Polynomial Operations ---"<< std::endl;
+                std::cout << "1. Add polynomial"<< std::endl;
+                std::cout << "2. Subtract polynomial"<< std::endl;
+                std::cout << "3. Multiply polynomial"<< std::endl;
+                std::cout << "4. Back to main menu"<< std::endl;
+                std::cout << "Choose an operation: ";
+                std::cin >> op;
 
-					std::cout << "Original polynomial: " << p1 << std::endl;
-					std::cout << "Result: " << p1 + p2 << std::endl;
-					break;
-				}
-				case 2:
-				{
-					std::cout << "Enter the second polynomial: ";
-					Polinomial p2;
-					std::cin >> p2;
+                if (std::cin.fail()) {
+                    std::cout << "Invalid input."<< std::endl;
+                    clearInput();
+                    continue;
+                }
 
-					std::cout << "Original polynomial: " << p1 << std::endl;
-					std::cout << "Result: " << p1 - p2 << std::endl;
-					break;
-				}
-				case 3:
-				{
-					std::cout << "Enter the second polynomial: ";
-					Polinomial p2;
-					std::cin >> p2;
+                if (op >= 1 && op <= 3) {
+                    std::cout << "Enter second polynomial: ";
+                    Polinomial p2;
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cin >> p2;
+                    std::cout << "Result: ";
+                    if (op == 1) std::cout << p1 + p2 << ""<< std::endl;
+                    else if (op == 2) std::cout << p1 - p2 << ""<< std::endl;
+                    else if (op == 3) std::cout << p1 * p2 << ""<< std::endl;
+                }
+            }
+            break;
+        }
 
-					std::cout << "Original polynomial: " << p1 << std::endl;
-					std::cout << "Result: " << p1 * p2 << std::endl;
-					break;
-				}
-				case 4:
-				{
-					break;
-				}
-				default:
-					break;
-				}
+        case 2: {
+            int op = 0;
+            while (op != 4) {
+                std::cout << "\n--- Polynomial & Constant ---"<< std::endl;
+                std::cout << "1. Add constant"<< std::endl;
+                std::cout << "2. Subtract constant"<< std::endl;
+                std::cout << "3. Multiply by constant"<< std::endl;
+                std::cout << "4. Back to main menu"<< std::endl;
+                std::cout << "Choose an operation: ";
+                std::cin >> op;
 
-			}
-			break;
+                if (std::cin.fail()) {
+                    std::cout << "Invalid input."<< std::endl;
+                    clearInput();
+                    continue;
+                }
 
-		}
-		case 2: {
-			int choice2 = 1;
+                if (op >= 1 && op <= 3) {
+                    double constant;
+                    std::cout << "Enter constant: ";
+                    std::cin >> constant;
+                    if (std::cin.fail()) {
+                        std::cout << "Invalid constant."<< std::endl;
+                        clearInput();
+                        continue;
+                    }
 
-			while (choice2 != 4)
-			{
-				std::cout << "---Operations on polynomial and constant menu---" << std::endl <<
-					"1. Polynomial and constant addition" << std::endl <<
-					"2. Subtraction of polynomial and constant" << std::endl <<
-					"3. Multiplication of polynomial and constant" << std::endl <<
-					"4. Exit" << std::endl << "Select the mode: ";
-				std::cin >> choice2;
-				std::cin.ignore();
-				switch (choice2)
-				{
-				case 1:
-				{
-					std::cout << "Enter a constant: ";
-					double p2;
-					std::cin >> p2;
-					std::cout << "Result: " << p1 + p2 << std::endl;
-					break;
-				}
-				case 2:
-				{
-					std::cout << "Enter a constant: ";
-					double p2;
-					std::cin >> p2;
-					std::cout << "Result: " << p1 - p2 << std::endl;
-					break;
-				}
-				case 3:
-				{
-					std::cout << "Enter a constant: ";
-					double p2;
-					std::cin >> p2;
-					std::cout << "Result: " << p1 * p2 << std::endl;
-					break;
-				}
-				case 4:
-				{
-					break;
-				}
-				default:
-					break;
-				}
+                    std::cout << "Result: ";
+                    if (op == 1) std::cout << p1 + constant << ""<< std::endl;
+                    else if (op == 2) std::cout << p1 - constant << ""<< std::endl;
+                    else if (op == 3) std::cout << p1 * constant << ""<< std::endl;
+                }
+            }
+            break;
+        }
 
-			}
-			break;
-		}
-		case 3: {
-			double x, y, z;
-			std::cout << "---Calculating the value of the polynomial---" << std::endl <<
-				"Current polynomial = " << p1 << std::endl <<
-				"Enter the value of x, y, z" << std::endl;
-			std::cin >> x >> y >> z;
-			std::cout << "Result: " << p1(x, y, z) << std::endl;
-			break;
-		}
-		case 5: {
-			a = 'n';
-			break;
-		}
-		default:
-		{
-			break;
-		}
-		};
-	}
+        case 3: {
+            double x, y, z;
+            std::cout << "\n--- Evaluate Polynomial ---"<< std::endl;
+            std::cout << "Enter values for x, y, z: ";
+            std::cin >> x >> y >> z;
+
+            if (std::cin.fail()) {
+                std::cout << "Invalid input."<< std::endl;
+                clearInput();
+                continue;
+            }
+
+            std::cout << "Result: " << p1(x, y, z) << ""<< std::endl;
+            break;
+        }
+
+        case 4: {
+            std::cout << "Enter new polynomial: ";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin >> p1;
+            break;
+        }
+
+        case 5: {
+            std::cout << "Exiting... Goodbye!"<< std::endl;
+            run = 'n';
+            break;
+        }
+
+        default:
+            std::cout << "Invalid choice. Please try again."<< std::endl;
+            break;
+        }
+    }
 }

@@ -68,11 +68,6 @@ public:
 	{
 		if (m.coefficent == 0.0) return ostr << "0";
 
-		//std::ios old_state(nullptr);
-		//old_state.copyfmt(ostr);
-
-		//ostr << std::fixed << std::setprecision(4);
-
 		if (m.degree == 000)
 		{
 			if (m.coefficent > 0) ostr << '+';
@@ -100,7 +95,7 @@ public:
 					std::cout << "x";
 				}
 			}
-			if (m.degree / 10 % 10 != 0)
+			if ((m.degree / 10) % 10 != 0)
 			{
 				if (m.degree / 10 % 10 > 1)
 				{
@@ -110,9 +105,6 @@ public:
 				{
 					std::cout << "y";
 				}
-			}
-			else {
-				std::cout << "y^0" << std::endl;
 			}
 			if (m.degree % 10 != 0)
 			{

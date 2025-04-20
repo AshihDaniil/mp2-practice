@@ -290,9 +290,9 @@ TEST(Polinomial, multiply_Polinomials_is_correct1)
 
 TEST(Polinomial, multiply_Polinomials_is_correct2)
 {
-    Polinomial p1("y^2+x");
-    Polinomial p2("y-x");
-    Polinomial p3("-x^2-xy^2+xy+y^3");
+    Polinomial p1("x+y");
+    Polinomial p2("x-y");
+    Polinomial p3("x^2-y^2");
     EXPECT_EQ(p3, (p1 * p2));
 }
 

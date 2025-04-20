@@ -14,7 +14,7 @@ Polinomial::Polinomial(const std::string& str)
 		}
 		if (!member.empty())
 		{
-			Monomial m1(member); //конструктор из строки переделать
+			Monomial m1(member); 
 			if (monoms.search(m1))
 			{
 				monoms.get_curr()->val += m1;
@@ -32,38 +32,51 @@ Polinomial::Polinomial(const Polinomial& p2) : monoms(p2.monoms) {};
 
 void Polinomial::insert_elem(const Monomial& monom)
 {
-	if (monom.getCoefficient() == 0) return;
+    if (monom.getCoefficient() == 0.0) return;
 
-	monoms.reset();
-	ListNode<Monomial>* newNode = new ListNode<Monomial>(monom);
+    bool found = false;
+    monoms.reset();
 
-	while (!monoms.is_end()) {
-		Monomial& curr = monoms.get_curr()->val;
+    /*while (!monoms.is_end()) {
+        Monomial& curr = monoms.get_curr()->val;
+        if (curr.getDegree() == monom.getDegree()) {
+            curr += monom;
+            if (curr.getCoefficient() == 0.0) {
+                monoms.remove(curr);
+            }
+            found = true;
+            break;
+        }
+        monoms.Next();
+    }*/
+    if (monoms.search(monom))
+    {
+        monoms.get_curr()->val += monom;
+        if (monoms.get_curr()->val.getCoefficient() == 0.0) {
+            monoms.remove(monoms.get_curr()->val);
+        }
+        found = true;
+    }
 
-		if (curr.getDegree() == monom.getDegree()) {
-			
-			curr += monom;
-			if (curr.getCoefficient() == 0) {
-				monoms.remove(curr);
 
-			}
-			delete newNode;
-			return;
-		}
+    if (found) return;
 
-		if (monom.getDegree() > curr.getDegree()) {
-			monoms.insert_Before(newNode, curr);
+    monoms.reset();
+    ListNode<Monomial>* newNode = new ListNode<Monomial>(monom);
+    bool inserted = false;
 
-			return;
-		}
+    while (!monoms.is_end()) {
+        if (monoms.get_curr()->val.getDegree() < monom.getDegree()) {
+            monoms.insert_Before(newNode, monoms.get_curr()->val);
+            inserted = true;
+            break;
+        }
+        monoms.Next();
+    }
 
-		monoms.Next();
-	}
-
-	monoms.insert_Back(newNode);
-
-	monoms.reset();
-
+    if (!inserted) {
+        monoms.insert_Back(newNode);
+    }
 }
 
 Polinomial Polinomial::operator+(const Monomial& monom)

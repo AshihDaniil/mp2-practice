@@ -73,9 +73,18 @@ Monomial::Monomial(const std::string& str)
 Monomial Monomial::operator*(const Monomial& monom2) const
 {
 	Monomial result;
-	result.coefficent = this->coefficent * monom2.coefficent;
-	result.degree = this->degree+monom2.degree;
-	return result;
+	int x_deg = (degree / 100) + (monom2.degree / 100);
+	int y_deg = ((degree / 10) % 10) + ((monom2.degree / 10) % 10);
+	int z_deg = (degree % 10) + (monom2.degree % 10);
+
+	if (x_deg > 9 || y_deg > 9 || z_deg > 9) {
+		throw std::invalid_argument("Degree overflow");
+	}
+
+	return Monomial(
+		coefficent * monom2.coefficent,
+		x_deg * 100 + y_deg * 10 + z_deg
+	);
 }
 
 Monomial Monomial::operator+(const Monomial& monom2) const
